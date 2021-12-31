@@ -11,9 +11,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: step_1
+      id: step_1
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.test_url }}
-        destination: ${{ steps.step_1.name }}-${{ matrix.run }}-${{ matrix.os }}.png
+        source: $test_url
+        destination: ${{ steps.step_1.id }}-${{ matrix.run }}-${{ matrix.os }}.png
         width: 1
