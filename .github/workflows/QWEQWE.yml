@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         run: |
-          echo 'hello'
+          echo hello
     runs-on: ${{ matrix.os }}
     steps:
     - name: step_1
