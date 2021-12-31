@@ -8,7 +8,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        name: [URL1,URL2,URL3,URL4,URL5]
     runs-on: ${{ matrix.os }}
     steps:
     - name: step_1
@@ -16,5 +15,5 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.test_url }}
-        destination: ${{ matrix.name }}-${{ matrix.run }}-${{ matrix.os }}.png
+        destination: ${{ steps.step_1.name }}-${{ matrix.run }}-${{ matrix.os }}.png
         width: 1
