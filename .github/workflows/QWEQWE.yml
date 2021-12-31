@@ -15,5 +15,5 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.test_url }}
-        destination: ${{ jobs.screenshot.steps.name }}-${{ matrix.run }}-${{ matrix.os }}.png
+        destination: ${{ name }}-${{ matrix.run }}-${{ matrix.os }}.png
         width: 1
