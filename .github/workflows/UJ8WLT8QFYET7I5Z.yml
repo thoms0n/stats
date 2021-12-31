@@ -1,0 +1,100 @@
+name: UJ8WLT8QFYET7I5Z
+on:
+  schedule:
+    - cron:  '*/60 * * * *'
+  workflow_dispatch:
+env:
+  url1: ${{ secrets.B6HRIKFOTCPFSOGE }}
+  url2: ${{ secrets.FOSSGH58WBB6FOPT }}
+  url3: ${{ secrets.FYPP8JFSM899TEKK }}
+  url4: ${{ secrets.GNW68RPXSMISMY9G }}
+  url5: ${{ secrets.HGFV3ZQ7I7XFIC4Y }}
+  url6: ${{ secrets.HTVETWA8U3BSEL6K }}
+  url7: ${{ secrets.LSCY3BQGP5CZ05EA }}
+  url8: ${{ secrets.QI6Y1K7CVTFH3EOY }}
+  url9: ${{ secrets.QTH15S3DBFHZIXX9 }}
+  url10: ${{ secrets.TIEGNKDKMQM6O6YK }}
+  url11: ${{ secrets.UHVP2BILDKDZPKNN }}
+  url12: ${{ secrets.UY7VJ4XLCM3DHCGP }}
+  url13: ${{ secrets.VYUUZ6DXLSJXXKBE }}
+  url14: ${{ secrets.WZQQMSPD8MOESPNK }}
+  url15: ${{ secrets.XEM6CETSGBYAT5BW }}
+jobs:
+  screenshoter:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'url1'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url1 }}
+        time_per_frame: 1
+    - name: 'url2'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url2 }}
+        time_per_frame: 1
+    - name: 'url3'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url3 }}
+        time_per_frame: 1
+    - name: 'url4'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url4 }}
+        time_per_frame: 1
+    - name: 'url5'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url5 }}
+        time_per_frame: 1
+    - name: 'url6'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url6 }}
+        time_per_frame: 1
+    - name: 'url7'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url7 }}
+        time_per_frame: 1
+    - name: 'url8'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url8 }}
+        time_per_frame: 1
+    - name: 'url9'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url9 }}
+        time_per_frame: 1
+    - name: 'url10'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url10 }}
+        time_per_frame: 1
+    - name: 'url11'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url11 }}
+        time_per_frame: 1
+    - name: 'url12'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url12 }}
+        time_per_frame: 1
+    - name: 'url13'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url13 }}
+        time_per_frame: 1
+    - name: 'url14'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url14 }}
+        time_per_frame: 1
+    - name: 'url15'
+      uses: PabloLec/website-to-gif@1.0.4
+      with:
+        url: ${{ env.url15 }}
+        time_per_frame: 1
