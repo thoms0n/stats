@@ -12,15 +12,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: foo
-      uses: actions/hello-world-composite-action@v1
-      with:
-        who-to-greet: 'Mona the Octocat'
-    - run: echo random-number ${{ steps.foo.outputs.random-number }}
-      shell: bash
-    - name: step_1
-      uses: swinton/screenshot-website@v1.x
-      continue-on-error: true
-      with:
-        source: ${{ env.test_url }}
-        destination: ${{ steps.foo.outputs.random-number }}-${{ matrix.run }}-${{ matrix.os }}.png
-        width: 1
+      run: echo random-number ${{ steps.foo.outputs.random-number }}
