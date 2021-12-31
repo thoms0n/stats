@@ -15,5 +15,5 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.test_url }}
-        destination: 1-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: $(echo $date)-${{ matrix.os }}-${{ matrix.width }}.png
         width: 1
