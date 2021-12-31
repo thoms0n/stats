@@ -1,11 +1,19 @@
 name: QWEQWE
 on:
   workflow_dispatch:
+env:
+  test_url: ${{ secrets.TEST_URL }}
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  screenshot:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - name: STEP_QWERTY
-        id: qwerty
-        run: echo ${{ steps.qwerty.name }}
+    - name: step_1
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
+      with:
+        source: ${{ env.test_url }}
+        destination: 1-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
