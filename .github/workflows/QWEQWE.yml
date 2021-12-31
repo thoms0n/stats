@@ -1,0 +1,11 @@
+name: QWEQWE
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: STEP_QWERTY
+        id: qwerty
+        run: echo ${{ steps.qwerty.name }}
