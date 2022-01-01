@@ -32,7 +32,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.G4zJCdNGnHRe }}
-        destination: 1-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: G4zJCdNGnHRe-${{ matrix.os }}.png
         width: 1
     - name: 9CGDdKQiTEYb
       id: 9CGDdKQiTEYb
@@ -40,7 +40,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.9CGDdKQiTEYb }}
-        destination: 2-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: 9CGDdKQiTEYb-${{ matrix.os }}.png
         width: 1
     - name: nWuhzYG8Dzo7
       id: nWuhzYG8Dzo7
@@ -48,7 +48,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.nWuhzYG8Dzo7 }}
-        destination: 3-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: nWuhzYG8Dzo7-${{ matrix.os }}.png
         width: 1
     - name: bj3FyczbJenv
       id: bj3FyczbJenv
@@ -56,7 +56,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.bj3FyczbJenv }}
-        destination: 4-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: bj3FyczbJenv-${{ matrix.os }}.png
         width: 1
     - name: lfXOhSZzSgo9
       id: lfXOhSZzSgo9
@@ -64,7 +64,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.lfXOhSZzSgo9 }}
-        destination: 5-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: lfXOhSZzSgo9-${{ matrix.os }}.png
         width: 1
     - name: vzh9sAT6nKQY
       id: vzh9sAT6nKQY
@@ -72,7 +72,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.vzh9sAT6nKQY }}
-        destination: 6-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: vzh9sAT6nKQY-${{ matrix.os }}.png
         width: 1
     - name: QdIDMTz1cI37
       id: QdIDMTz1cI37
@@ -80,7 +80,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.QdIDMTz1cI37 }}
-        destination: 7-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: QdIDMTz1cI37-${{ matrix.os }}.png
         width: 1
     - name: TlQKZMPb3LXi
       id: TlQKZMPb3LXi
@@ -88,7 +88,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.TlQKZMPb3LXi }}
-        destination: 8-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: TlQKZMPb3LXi-${{ matrix.os }}.png
         width: 1
     - name: 6plAbSIXSXln
       id: 6plAbSIXSXln
@@ -96,7 +96,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.6plAbSIXSXln }}
-        destination: 9-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: 6plAbSIXSXln-${{ matrix.os }}.png
         width: 1
     - name: IENGbdITyzZ6
       id: IENGbdITyzZ6
@@ -104,7 +104,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.IENGbdITyzZ6 }}
-        destination: 10-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: IENGbdITyzZ6-${{ matrix.os }}.png
         width: 1
     - name: Tgk57tf0beRV
       id: Tgk57tf0beRV
@@ -112,7 +112,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.Tgk57tf0beRV }}
-        destination: 11-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: Tgk57tf0beRV-${{ matrix.os }}.png
         width: 1
     - name: lqBMfp4aJYdM
       id: lqBMfp4aJYdM
@@ -120,7 +120,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.lqBMfp4aJYdM }}
-        destination: 12-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: lqBMfp4aJYdM-${{ matrix.os }}.png
         width: 1
     - name: 9dFB5yhbuqai
       id: 9dFB5yhbuqai
@@ -128,7 +128,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.9dFB5yhbuqai }}
-        destination: 13-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: 9dFB5yhbuqai-${{ matrix.os }}.png
         width: 1
     - name: jmExB5bo3sYB
       id: jmExB5bo3sYB
@@ -136,7 +136,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.jmExB5bo3sYB }}
-        destination: 14-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: jmExB5bo3sYB-${{ matrix.os }}.png
         width: 1
     - name: dvAryGLFYD9e
       id: dvAryGLFYD9e
@@ -144,5 +144,5 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.dvAryGLFYD9e }}
-        destination: 15-${{ matrix.os }}-${{ matrix.width }}.png
+        destination: dvAryGLFYD9e-${{ matrix.os }}.png
         width: 1
