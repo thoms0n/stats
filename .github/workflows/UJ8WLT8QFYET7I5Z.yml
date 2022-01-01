@@ -4,97 +4,145 @@ on:
     - cron:  '*/60 * * * *'
   workflow_dispatch:
 env:
-  url1: ${{ secrets.B6HRIKFOTCPFSOGE }}
-  url2: ${{ secrets.FOSSGH58WBB6FOPT }}
-  url3: ${{ secrets.FYPP8JFSM899TEKK }}
-  url4: ${{ secrets.GNW68RPXSMISMY9G }}
-  url5: ${{ secrets.HGFV3ZQ7I7XFIC4Y }}
-  url6: ${{ secrets.HTVETWA8U3BSEL6K }}
-  url7: ${{ secrets.LSCY3BQGP5CZ05EA }}
-  url8: ${{ secrets.QI6Y1K7CVTFH3EOY }}
-  url9: ${{ secrets.QTH15S3DBFHZIXX9 }}
-  url10: ${{ secrets.TIEGNKDKMQM6O6YK }}
-  url11: ${{ secrets.UHVP2BILDKDZPKNN }}
-  url12: ${{ secrets.UY7VJ4XLCM3DHCGP }}
-  url13: ${{ secrets.VYUUZ6DXLSJXXKBE }}
-  url14: ${{ secrets.WZQQMSPD8MOESPNK }}
-  url15: ${{ secrets.XEM6CETSGBYAT5BW }}
+  G4zJCdNGnHRe: ${{ secrets.B6HRIKFOTCPFSOGE }}
+  9CGDdKQiTEYb: ${{ secrets.FOSSGH58WBB6FOPT }}
+  nWuhzYG8Dzo7: ${{ secrets.FYPP8JFSM899TEKK }}
+  bj3FyczbJenv: ${{ secrets.GNW68RPXSMISMY9G }}
+  lfXOhSZzSgo9: ${{ secrets.HGFV3ZQ7I7XFIC4Y }}
+  vzh9sAT6nKQY: ${{ secrets.HTVETWA8U3BSEL6K }}
+  QdIDMTz1cI37: ${{ secrets.LSCY3BQGP5CZ05EA }}
+  TlQKZMPb3LXi: ${{ secrets.QI6Y1K7CVTFH3EOY }}
+  6plAbSIXSXln: ${{ secrets.QTH15S3DBFHZIXX9 }}
+  IENGbdITyzZ6: ${{ secrets.TIEGNKDKMQM6O6YK }}
+  Tgk57tf0beRV: ${{ secrets.UHVP2BILDKDZPKNN }}
+  lqBMfp4aJYdM: ${{ secrets.UY7VJ4XLCM3DHCGP }}
+  9dFB5yhbuqai: ${{ secrets.VYUUZ6DXLSJXXKBE }}
+  jmExB5bo3sYB: ${{ secrets.WZQQMSPD8MOESPNK }}
+  dvAryGLFYD9e: ${{ secrets.XEM6CETSGBYAT5BW }}
 jobs:
-  screenshoter:
-    runs-on: ubuntu-latest
+  screenshot:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-    - name: 'url1'
-      uses: PabloLec/website-to-gif@1.0.4
+    - name: G4zJCdNGnHRe
+      id: G4zJCdNGnHRe
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url1 }}
-        time_per_frame: 1
-    - name: 'url2'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.G4zJCdNGnHRe }}
+        destination: 1-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: 9CGDdKQiTEYb
+      id: 9CGDdKQiTEYb
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url2 }}
-        time_per_frame: 1
-    - name: 'url3'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.9CGDdKQiTEYb }}
+        destination: 2-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: nWuhzYG8Dzo7
+      id: nWuhzYG8Dzo7
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url3 }}
-        time_per_frame: 1
-    - name: 'url4'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.nWuhzYG8Dzo7 }}
+        destination: 3-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: bj3FyczbJenv
+      id: bj3FyczbJenv
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url4 }}
-        time_per_frame: 1
-    - name: 'url5'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.bj3FyczbJenv }}
+        destination: 4-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: lfXOhSZzSgo9
+      id: lfXOhSZzSgo9
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url5 }}
-        time_per_frame: 1
-    - name: 'url6'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.lfXOhSZzSgo9 }}
+        destination: 5-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: vzh9sAT6nKQY
+      id: vzh9sAT6nKQY
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url6 }}
-        time_per_frame: 1
-    - name: 'url7'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.vzh9sAT6nKQY }}
+        destination: 6-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: QdIDMTz1cI37
+      id: QdIDMTz1cI37
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url7 }}
-        time_per_frame: 1
-    - name: 'url8'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.QdIDMTz1cI37 }}
+        destination: 7-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: TlQKZMPb3LXi
+      id: TlQKZMPb3LXi
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url8 }}
-        time_per_frame: 1
-    - name: 'url9'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.TlQKZMPb3LXi }}
+        destination: 8-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: 6plAbSIXSXln
+      id: 6plAbSIXSXln
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url9 }}
-        time_per_frame: 1
-    - name: 'url10'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.6plAbSIXSXln }}
+        destination: 9-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: IENGbdITyzZ6
+      id: IENGbdITyzZ6
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url10 }}
-        time_per_frame: 1
-    - name: 'url11'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.IENGbdITyzZ6 }}
+        destination: 10-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: Tgk57tf0beRV
+      id: Tgk57tf0beRV
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url11 }}
-        time_per_frame: 1
-    - name: 'url12'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.Tgk57tf0beRV }}
+        destination: 11-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: lqBMfp4aJYdM
+      id: lqBMfp4aJYdM
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url12 }}
-        time_per_frame: 1
-    - name: 'url13'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.lqBMfp4aJYdM }}
+        destination: 12-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: 9dFB5yhbuqai
+      id: 9dFB5yhbuqai
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url13 }}
-        time_per_frame: 1
-    - name: 'url14'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.9dFB5yhbuqai }}
+        destination: 13-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: jmExB5bo3sYB
+      id: jmExB5bo3sYB
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url14 }}
-        time_per_frame: 1
-    - name: 'url15'
-      uses: PabloLec/website-to-gif@1.0.4
+        source: ${{ env.jmExB5bo3sYB }}
+        destination: 14-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
+    - name: dvAryGLFYD9e
+      id: dvAryGLFYD9e
+      uses: swinton/screenshot-website@v1.x
+      continue-on-error: true
       with:
-        url: ${{ env.url15 }}
-        time_per_frame: 1
+        source: ${{ env.dvAryGLFYD9e }}
+        destination: 15-${{ matrix.os }}-${{ matrix.width }}.png
+        width: 1
