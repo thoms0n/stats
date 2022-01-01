@@ -4,21 +4,21 @@ on:
     - cron:  '*/60 * * * *'
   workflow_dispatch:
 env:
-  G4zJCdNGnHRe: ${{ secrets.B6HRIKFOTCPFSOGE }}
-  9CGDdKQiTEYb: ${{ secrets.FOSSGH58WBB6FOPT }}
-  nWuhzYG8Dzo7: ${{ secrets.FYPP8JFSM899TEKK }}
-  bj3FyczbJenv: ${{ secrets.GNW68RPXSMISMY9G }}
-  lfXOhSZzSgo9: ${{ secrets.HGFV3ZQ7I7XFIC4Y }}
-  vzh9sAT6nKQY: ${{ secrets.HTVETWA8U3BSEL6K }}
-  QdIDMTz1cI37: ${{ secrets.LSCY3BQGP5CZ05EA }}
-  TlQKZMPb3LXi: ${{ secrets.QI6Y1K7CVTFH3EOY }}
-  6plAbSIXSXln: ${{ secrets.QTH15S3DBFHZIXX9 }}
-  IENGbdITyzZ6: ${{ secrets.TIEGNKDKMQM6O6YK }}
-  Tgk57tf0beRV: ${{ secrets.UHVP2BILDKDZPKNN }}
-  lqBMfp4aJYdM: ${{ secrets.UY7VJ4XLCM3DHCGP }}
-  9dFB5yhbuqai: ${{ secrets.VYUUZ6DXLSJXXKBE }}
-  jmExB5bo3sYB: ${{ secrets.WZQQMSPD8MOESPNK }}
-  dvAryGLFYD9e: ${{ secrets.XEM6CETSGBYAT5BW }}
+  psxoamilmodttjj: ${{ secrets.B6HRIKFOTCPFSOGE }}
+  jxmbjtzujnvccgl: ${{ secrets.FOSSGH58WBB6FOPT }}
+  lygfxdzrfpwwclr: ${{ secrets.FYPP8JFSM899TEKK }}
+  hbwbqktysatmofs: ${{ secrets.GNW68RPXSMISMY9G }}
+  zvmclzzrjzmcoae: ${{ secrets.HGFV3ZQ7I7XFIC4Y }}
+  kdzaxnpmjryaaig: ${{ secrets.HTVETWA8U3BSEL6K }}
+  zctsvkowdiwbqbd: ${{ secrets.LSCY3BQGP5CZ05EA }}
+  fuzdtiztmkhjgfh: ${{ secrets.QI6Y1K7CVTFH3EOY }}
+  xkteealbsnuzfqb: ${{ secrets.QTH15S3DBFHZIXX9 }}
+  mgmhhugjmytfncc: ${{ secrets.TIEGNKDKMQM6O6YK }}
+  gpcyfrwmsntjtle: ${{ secrets.UHVP2BILDKDZPKNN }}
+  nstmrqppexhrfbi: ${{ secrets.UY7VJ4XLCM3DHCGP }}
+  uxlhishessqqrjs: ${{ secrets.VYUUZ6DXLSJXXKBE }}
+  qtvkxlrugzyyqwn: ${{ secrets.WZQQMSPD8MOESPNK }}
+  zntwflileecokgt: ${{ secrets.XEM6CETSGBYAT5BW }}
 jobs:
   screenshot:
     strategy:
@@ -26,123 +26,123 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-    - name: G4zJCdNGnHRe
-      id: G4zJCdNGnHRe
+    - name: psxoamilmodttjj
+      id: psxoamilmodttjj
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.G4zJCdNGnHRe }}
-        destination: G4zJCdNGnHRe-${{ matrix.os }}.png
+        source: ${{ env.psxoamilmodttjj }}
+        destination: psxoamilmodttjj-${{ matrix.os }}.png
         width: 1
-    - name: 9CGDdKQiTEYb
-      id: 9CGDdKQiTEYb
+    - name: jxmbjtzujnvccgl
+      id: jxmbjtzujnvccgl
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.9CGDdKQiTEYb }}
-        destination: 9CGDdKQiTEYb-${{ matrix.os }}.png
+        source: ${{ env.jxmbjtzujnvccgl }}
+        destination: jxmbjtzujnvccgl-${{ matrix.os }}.png
         width: 1
-    - name: nWuhzYG8Dzo7
-      id: nWuhzYG8Dzo7
+    - name: lygfxdzrfpwwclr
+      id: lygfxdzrfpwwclr
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.nWuhzYG8Dzo7 }}
-        destination: nWuhzYG8Dzo7-${{ matrix.os }}.png
+        source: ${{ env.lygfxdzrfpwwclr }}
+        destination: lygfxdzrfpwwclr-${{ matrix.os }}.png
         width: 1
-    - name: bj3FyczbJenv
-      id: bj3FyczbJenv
+    - name: hbwbqktysatmofs
+      id: hbwbqktysatmofs
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.bj3FyczbJenv }}
-        destination: bj3FyczbJenv-${{ matrix.os }}.png
+        source: ${{ env.hbwbqktysatmofs }}
+        destination: hbwbqktysatmofs-${{ matrix.os }}.png
         width: 1
-    - name: lfXOhSZzSgo9
-      id: lfXOhSZzSgo9
+    - name: zvmclzzrjzmcoae
+      id: zvmclzzrjzmcoae
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.lfXOhSZzSgo9 }}
-        destination: lfXOhSZzSgo9-${{ matrix.os }}.png
+        source: ${{ env.zvmclzzrjzmcoae }}
+        destination: zvmclzzrjzmcoae-${{ matrix.os }}.png
         width: 1
-    - name: vzh9sAT6nKQY
-      id: vzh9sAT6nKQY
+    - name: kdzaxnpmjryaaig
+      id: kdzaxnpmjryaaig
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.vzh9sAT6nKQY }}
-        destination: vzh9sAT6nKQY-${{ matrix.os }}.png
+        source: ${{ env.kdzaxnpmjryaaig }}
+        destination: kdzaxnpmjryaaig-${{ matrix.os }}.png
         width: 1
-    - name: QdIDMTz1cI37
-      id: QdIDMTz1cI37
+    - name: zctsvkowdiwbqbd
+      id: zctsvkowdiwbqbd
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.QdIDMTz1cI37 }}
-        destination: QdIDMTz1cI37-${{ matrix.os }}.png
+        source: ${{ env.zctsvkowdiwbqbd }}
+        destination: zctsvkowdiwbqbd-${{ matrix.os }}.png
         width: 1
-    - name: TlQKZMPb3LXi
-      id: TlQKZMPb3LXi
+    - name: fuzdtiztmkhjgfh
+      id: fuzdtiztmkhjgfh
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.TlQKZMPb3LXi }}
-        destination: TlQKZMPb3LXi-${{ matrix.os }}.png
+        source: ${{ env.fuzdtiztmkhjgfh }}
+        destination: fuzdtiztmkhjgfh-${{ matrix.os }}.png
         width: 1
-    - name: 6plAbSIXSXln
-      id: 6plAbSIXSXln
+    - name: xkteealbsnuzfqb
+      id: xkteealbsnuzfqb
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.6plAbSIXSXln }}
-        destination: 6plAbSIXSXln-${{ matrix.os }}.png
+        source: ${{ env.xkteealbsnuzfqb }}
+        destination: xkteealbsnuzfqb-${{ matrix.os }}.png
         width: 1
-    - name: IENGbdITyzZ6
-      id: IENGbdITyzZ6
+    - name: mgmhhugjmytfncc
+      id: mgmhhugjmytfncc
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.IENGbdITyzZ6 }}
-        destination: IENGbdITyzZ6-${{ matrix.os }}.png
+        source: ${{ env.mgmhhugjmytfncc }}
+        destination: mgmhhugjmytfncc-${{ matrix.os }}.png
         width: 1
-    - name: Tgk57tf0beRV
-      id: Tgk57tf0beRV
+    - name: gpcyfrwmsntjtle
+      id: gpcyfrwmsntjtle
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.Tgk57tf0beRV }}
-        destination: Tgk57tf0beRV-${{ matrix.os }}.png
+        source: ${{ env.gpcyfrwmsntjtle }}
+        destination: gpcyfrwmsntjtle-${{ matrix.os }}.png
         width: 1
-    - name: lqBMfp4aJYdM
-      id: lqBMfp4aJYdM
+    - name: nstmrqppexhrfbi
+      id: nstmrqppexhrfbi
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.lqBMfp4aJYdM }}
-        destination: lqBMfp4aJYdM-${{ matrix.os }}.png
+        source: ${{ env.nstmrqppexhrfbi }}
+        destination: nstmrqppexhrfbi-${{ matrix.os }}.png
         width: 1
-    - name: 9dFB5yhbuqai
-      id: 9dFB5yhbuqai
+    - name: uxlhishessqqrjs
+      id: uxlhishessqqrjs
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.9dFB5yhbuqai }}
-        destination: 9dFB5yhbuqai-${{ matrix.os }}.png
+        source: ${{ env.uxlhishessqqrjs }}
+        destination: uxlhishessqqrjs-${{ matrix.os }}.png
         width: 1
-    - name: jmExB5bo3sYB
-      id: jmExB5bo3sYB
+    - name: qtvkxlrugzyyqwn
+      id: qtvkxlrugzyyqwn
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.jmExB5bo3sYB }}
-        destination: jmExB5bo3sYB-${{ matrix.os }}.png
+        source: ${{ env.qtvkxlrugzyyqwn }}
+        destination: qtvkxlrugzyyqwn-${{ matrix.os }}.png
         width: 1
-    - name: dvAryGLFYD9e
-      id: dvAryGLFYD9e
+    - name: zntwflileecokgt
+      id: zntwflileecokgt
       uses: swinton/screenshot-website@v1.x
       continue-on-error: true
       with:
-        source: ${{ env.dvAryGLFYD9e }}
-        destination: dvAryGLFYD9e-${{ matrix.os }}.png
+        source: ${{ env.zntwflileecokgt }}
+        destination: zntwflileecokgt-${{ matrix.os }}.png
         width: 1
