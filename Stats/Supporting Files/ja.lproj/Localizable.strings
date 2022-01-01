@@ -9,13 +9,32 @@
 //  Copyright © 2020 treastrain / Tanaka Ryoga. All rights reserved.
 //
 
+// Modules
+"CPU" = "CPU";
+"Open CPU settings" = "CPU の設定を開く";
+"GPU" = "GPU";
+"Open GPU settings" = "GPU の設定を開く";
+"RAM" = "RAM";
+"Open RAM settings" = "RAM の設定を開く";
+"Disk" = "ディスク";
+"Open Disk settings" = "ディスクの設定を開く";
+"Sensors" = "センサー";
+"Open Sensors settings" = "センサーの設定を開く";
+"Fans" = "ファン";
+"Open Fans settings" = "ファンの設定を開く";
+"Network" = "ネットワーク";
+"Open Network settings" = "ネットワークの設定を開く";
+"Battery" = "バッテリー";
+"Open Battery settings" = "バッテリーの設定を開く";
+"Bluetooth" = "Bluetooth";
+"Open Bluetooth settings" = "Bluetooth の設定を開く";
+
 // Words
 "Unknown" = "不明";
 "Version" = "バージョン";
 "Processor" = "プロセッサ";
 "Memory" = "メモリ";
 "Graphics" = "グラフィックス";
-"Disk" = "ディスク";
 "Close" = "閉じる";
 "Download" = "ダウンロード";
 "Install" = "インストール";
@@ -23,7 +42,8 @@
 "Unavailable" = "使用できません";
 "Yes" = "はい";
 "No" = "いいえ";
-"Automatic" = "自動";
+"Automatic" = "オート";
+"Manual" = "マニュアル";
 "None" = "なし";
 "Dots" = "ドット";
 "Arrows" = "矢印";
@@ -31,6 +51,15 @@
 "Short" = "ショート";
 "Long" = "ロング";
 "Statistics" = "統計";
+"Max" = "最大";
+"Min" = "最小";
+"Reset" = "リセット";
+"Alignment" = "配置";
+"Left alignment" = "左揃え";
+"Center alignment" = "中央揃え";
+"Right alignment" = "右揃え";
+"Dashboard" = "ダッシュボード";
+"Disabled" = "Disabled";
 
 // Alerts
 "New version available" = "新しいバージョンが利用可能です";
@@ -40,17 +69,27 @@
 
 // Settings
 "Open Activity Monitor" = "アクティビティモニタを開く";
-"Report a bug" = "バグを報告する";
+"Report a bug" = "バグを報告";
+"Support the application" = "Stats をサポート";
 "Close application" = "Stats を終了";
 "Open application settings" = "Stats の設定を開く";
-"Open moduleName settings" = "%0 の設定を開く";
+"Open dashboard" = "ダッシュボードを開く";
 
 // Application settings
 "Update application" = "アプリをアップデートする";
 "Check for updates" = "アップデートの確認頻度";
+"At start" = "起動時";
+"Once per day" = "1日ごと";
+"Once per week" = "1週間ごと";
+"Once per month" = "1ヶ月ごと";
+"Never" = "確認しない";
 "Check for update" = "アップデートを確認する";
 "Show icon in dock" = "Dock にアイコンを表示";
 "Start at login" = "ログイン時に開く";
+
+// Dashboard
+"Serial number" = "シリアル番号";
+"Uptime" = "起動してからの時間";
 
 // Update
 "The latest version of Stats installed" = "最新の Stats がインストールされています";
@@ -72,10 +111,25 @@
 "Display mode" = "表示形式";
 "One row" = "1行";
 "Two rows" = "2行";
+"Mini widget" = "ミニ";
+"Line chart widget" = "線グラフ";
+"Bar chart widget" = "棒グラフ";
+"Pie chart widget" = "円グラフ";
+"Network chart widget" = "ネットワーク使用状況チャート";
+"Speed widget" = "速度";
+"Battery widget" = "バッテリー";
+"Text widget" = "テキスト";
+"Memory widget" = "未使用/使用済み";
+"Static width" = "固定幅";
+"Tachometer widget" = "Tachometer";
+"Show symbols" = "Show symbols";
+"Label widget" = "Label";
+"Number of reads in the chart" = "Number of reads in the chart";
 
 // Module Kit
 "Open module settings" = "このモジュールの設定を開く";
-"Select widget" = "%0 ウィジェットを選択";
+"Select widget" = "%0ウィジェットを選択";
+"Open widget settings" = "このウィジェットの設定を開く";
 "Update interval" = "更新間隔";
 "Usage history" = "履歴";
 "Details" = "詳細";
@@ -84,6 +138,7 @@
 
 // Modules
 "Number of top processes" = "表示する上位プロセスの数";
+"Update interval for top processes" = "Update interval for top processes";
 
 // CPU
 "CPU usage" = "CPU 使用率";
@@ -94,16 +149,34 @@
 "Idle" = "アイドル";
 "Show usage per core" = "コアごとの使用率を表示";
 "Show hyper-threading cores" = "ハイパースレッディングコアを表示";
+"Split the value (System/User)" = "値を分割する (システム/ユーザー)";
+"Scheduler limit" = "Scheduler limit";
+"Speed limit" = "Speed limit";
+"Average load" = "Average load";
+"1 minute" = "1 minute";
+"5 minutes" = "5 minutes";
+"15 minutes" = "15 minutes";
 
 // GPU
 "GPU to show" = "表示する GPU";
-"Show GPU type" = "Show GPU type";
+"Show GPU type" = "GPU の種類を表示";
+"GPU enabled" = "GPU 有効";
+"GPU disabled" = "GPU 無効";
 "GPU temperature" = "GPU 温度";
 "GPU utilization" = "GPU 使用率";
+"Vendor" = "製造元";
+"Model" = "モデル";
+"Status" = "状態";
+"Active" = "アクティブ";
+"Non active" = "非アクティブ";
+"Fan speed" = "ファン速度";
+"Core clock" = "コアクロック";
+"Memory clock" = "メモリクロック";
+"Utilization" = "使用率";
 
-// Memory
+// RAM
 "Memory usage" = "メモリ使用率";
-"Memory pressure" = "メモリプレッシャー";
+"Memory pressure" = "メモリ負荷";
 "Total" = "合計";
 "Used" = "使用済みメモリ";
 "App" = "アプリケーションメモリ";
@@ -111,6 +184,7 @@
 "Compressed" = "圧縮";
 "Free" = "空き";
 "Swap" = "スワップ使用領域";
+"Split the value (App/Wired/Compressed)" = "値を分割する (アプリケーションメモリ/確保されているメモリ/圧縮)";
 
 // Disk
 "Show removable disks" = "リムーバブルディスクを表示";
@@ -124,6 +198,8 @@
 "Temperature unit" = "温度単位";
 "Celsius" = "摂氏（℃）";
 "Fahrenheit" = "華氏（℉）";
+"Save the fan speed" = "Save the fan speed";
+"Fan" = "Fan";
 
 // Network
 "Uploading" = "送信";
@@ -131,8 +207,8 @@
 "Public IP" = "パブリック IP";
 "Local IP" = "ローカル IP";
 "Interface" = "インターフェイス";
-"Network" = "Wi-Fi ネットワーク名";
 "Physical address" = "MAC アドレス";
+"Refresh" = "更新";
 "Click to copy public IP address" = "クリックしてパブリック IP アドレスをコピー";
 "Click to copy local IP address" = "クリックしてローカル IP アドレスをコピー";
 "Click to copy wifi name" = "クリックして Wi-Fi ネットワーク名をコピー";
@@ -144,15 +220,18 @@
 "Reader type" = "リーダータイプ";
 "Interface based" = "インターフェイス";
 "Processes based" = "プロセス";
+"Reset data usage" = "Reset data usage";
 
 // Battery
 "Level" = "充電残量";
 "Source" = "電源";
+"AC Power" = "電源アダプタ";
+"Battery Power" = "バッテリー";
 "Time" = "バッテリー残り時間";
 "Health" = "状態";
-"Battery" = "バッテリー";
 "Amperage" = "電流";
 "Voltage" = "電圧";
+"Cycles" = "サイクル数";
 "Temperature" = "温度";
 "Power adapter" = "電源アダプタ";
 "Power" = "電力";
@@ -163,13 +242,49 @@
 "Fully charged" = "フル充電済み";
 "Not connected" = "接続されていません";
 "Low level notification" = "バッテリー残量低下の通知";
+"High level notification" = "バッテリー充電状況の通知";
 "Low battery" = "バッテリー残量低下";
+"High battery" = "バッテリー充電状況";
 "Battery remaining" = "バッテリー残量 残り %0%";
+"Battery remaining to full charge" = "フル充電まであと %0%";
 "Percentage" = "残量（%）";
 "Percentage and time" = "残量（%）と残り時間";
 "Time and percentage" = "残り時間と残量（%）";
 "Time format" = "時間の表示形式";
 "Hide additional information when full" = "フル充電済みのときはアイコンのみ表示";
+"Last charge" = "最後の充電から";
 
-// Fans
-"Fans" = "ファン";
+// Bluetooth
+"Battery to show" = "バッテリー残量を表示するデバイス";
+
+// Colors
+"Based on utilization" = "使用率に基づいたカラー";
+"Based on pressure" = "負荷に基づいたカラー";
+"System accent" = "システムアクセント";
+"Monochrome accent" = "モノクロ";
+"Clear" = "クリア";
+"White" = "ホワイト";
+"Black" = "ブラック";
+"Gray" = "グレー";
+"Second gray" = "システムグレー";
+"Dark gray" = "ダークグレー";
+"Light gray" = "ライトグレー";
+"Red" = "レッド";
+"Second red" = "システムレッド";
+"Green" = "グリーン";
+"Second green" = "システムグリーン";
+"Blue" = "ブルー";
+"Second blue" = "システムブルー";
+"Yellow" = "イエロー";
+"Second yellow" = "システムイエロー";
+"Orange" = "オレンジ";
+"Second orange" = "システムオレンジ";
+"Purple" = "パープル";
+"Second purple" = "システムパープル";
+"Brown" = "ブラウン";
+"Second brown" = "システムブラウン";
+"Cyan" = "シアン";
+"Magenta" = "マゼンタ";
+"Pink" = "システムピンク";
+"Teal" = "システムティール";
+"Indigo" = "システムインディゴ";

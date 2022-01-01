@@ -10,11 +10,9 @@
 //
 
 import Cocoa
-import ModuleKit
-import StatsKit
+import Kit
 
 internal class Popup: NSView, Popup_p {
-    private var store: UnsafePointer<Store>
     private var title: String
     
     private var grid: NSGridView? = nil
@@ -27,7 +25,7 @@ internal class Popup: NSView, Popup_p {
     private var usedField: NSTextField? = nil
     private var freeField: NSTextField? = nil
     
-    private var activeField: NSTextField? = nil
+    private var appField: NSTextField? = nil
     private var inactiveField: NSTextField? = nil
     private var wiredField: NSTextField? = nil
     private var compressedField: NSTextField? = nil
@@ -43,19 +41,19 @@ internal class Popup: NSView, Popup_p {
     
     private var numberOfProcesses: Int {
         get {
-            return self.store.pointee.int(key: "\(self.title)_processes", defaultValue: 8)
+            return Store.shared.int(key: "\(self.title)_processes", defaultValue: 8)
         }
     }
     private var processesHeight: CGFloat {
         get {
-            return (self.processHeight*CGFloat(self.numberOfProcesses))+Constants.Popup.separatorHeight
+            let num = self.numberOfProcesses
+            return (self.processHeight*CGFloat(num)) + (num == 0 ? 0 : Constants.Popup.separatorHeight)
         }
     }
     
     public var sizeCallback: ((NSSize) -> Void)? = nil
     
-    public init(_ title: String, store: UnsafePointer<Store>) {
-        self.store = store
+    public init(_ title: String) {
         self.title = title
         
         super.init(frame: NSRect(
@@ -123,13 +121,13 @@ internal class Popup: NSView, Popup_p {
             width: container.frame.height,
             height: container.frame.height
         ), segments: [], drawValue: true)
-        self.circle!.toolTip = LocalizedString("Memory usage")
+        self.circle!.toolTip = localizedString("Memory usage")
         container.addSubview(self.circle!)
         
         let centralWidth: CGFloat = self.dashboardHeight-20
         let sideWidth: CGFloat = (view.frame.width - centralWidth - (Constants.Popup.margins*2))/2
         self.level = PressureView(frame: NSRect(x: (sideWidth - 60)/2, y: 10, width: 60, height: 50))
-        self.level!.toolTip = LocalizedString("Memory pressure")
+        self.level!.toolTip = localizedString("Memory pressure")
         
         view.addSubview(self.level!)
         view.addSubview(container)
@@ -139,7 +137,7 @@ internal class Popup: NSView, Popup_p {
     
     private func initChart() -> NSView  {
         let view: NSView = NSView(frame: NSRect(x: 0, y: 0, width: self.frame.width, height: self.chartHeight))
-        let separator = SeparatorView(LocalizedString("Usage history"), origin: NSPoint(x: 0, y: self.chartHeight-Constants.Popup.separatorHeight), width: self.frame.width)
+        let separator = separatorView(localizedString("Usage history"), origin: NSPoint(x: 0, y: self.chartHeight-Constants.Popup.separatorHeight), width: self.frame.width)
         let container: NSView = NSView(frame: NSRect(x: 0, y: 0, width: self.frame.width, height: separator.frame.origin.y))
         container.wantsLayer = true
         container.layer?.backgroundColor = NSColor.lightGray.withAlphaComponent(0.1).cgColor
@@ -156,15 +154,15 @@ internal class Popup: NSView, Popup_p {
     
     private func initDetails() -> NSView  {
         let view: NSView = NSView(frame: NSRect(x: 0, y: 0, width: self.frame.width, height: self.detailsHeight))
-        let separator = SeparatorView(LocalizedString("Details"), origin: NSPoint(x: 0, y: self.detailsHeight-Constants.Popup.separatorHeight), width: self.frame.width)
+        let separator = separatorView(localizedString("Details"), origin: NSPoint(x: 0, y: self.detailsHeight-Constants.Popup.separatorHeight), width: self.frame.width)
         let container: NSView = NSView(frame: NSRect(x: 0, y: 0, width: self.frame.width, height: separator.frame.origin.y))
         
-        self.usedField = PopupRow(container, n: 5, title: "\(LocalizedString("Used")):", value: "").1
-        self.activeField = PopupWithColorRow(container, color: NSColor.systemBlue, n: 4, title: "\(LocalizedString("App")):", value: "")
-        self.wiredField = PopupWithColorRow(container, color: NSColor.systemOrange, n: 3, title: "\(LocalizedString("Wired")):", value: "")
-        self.compressedField = PopupWithColorRow(container, color: NSColor.systemPink, n: 2, title: "\(LocalizedString("Compressed")):", value: "")
-        self.freeField = PopupWithColorRow(container, color: NSColor.lightGray.withAlphaComponent(0.5), n: 1, title: "\(LocalizedString("Free")):", value: "")
-        self.swapField = PopupRow(container, n: 0, title: "\(LocalizedString("Swap")):", value: "").1
+        self.usedField = popupRow(container, n: 5, title: "\(localizedString("Used")):", value: "").1
+        self.appField = popupWithColorRow(container, color: NSColor.systemBlue, n: 4, title: "\(localizedString("App")):", value: "")
+        self.wiredField = popupWithColorRow(container, color: NSColor.systemOrange, n: 3, title: "\(localizedString("Wired")):", value: "")
+        self.compressedField = popupWithColorRow(container, color: NSColor.systemPink, n: 2, title: "\(localizedString("Compressed")):", value: "")
+        self.freeField = popupWithColorRow(container, color: NSColor.lightGray.withAlphaComponent(0.5), n: 1, title: "\(localizedString("Free")):", value: "")
+        self.swapField = popupRow(container, n: 0, title: "\(localizedString("Swap")):", value: "").1
         
         view.addSubview(separator)
         view.addSubview(container)
@@ -174,13 +172,15 @@ internal class Popup: NSView, Popup_p {
     
     private func initProcesses() -> NSView  {
         let view: NSView = NSView(frame: NSRect(x: 0, y: 0, width: self.frame.width, height: self.processesHeight))
-        let separator = SeparatorView(LocalizedString("Top processes"), origin: NSPoint(x: 0, y: self.processesHeight-Constants.Popup.separatorHeight), width: self.frame.width)
-        let container: NSView = NSView(frame: NSRect(x: 0, y: 0, width: self.frame.width, height: separator.frame.origin.y))
+        let separator = separatorView(localizedString("Top processes"), origin: NSPoint(x: 0, y: self.processesHeight-Constants.Popup.separatorHeight), width: self.frame.width)
+        let container: NSStackView = NSStackView(frame: NSRect(x: 0, y: 0, width: self.frame.width, height: separator.frame.origin.y))
+        container.orientation = .vertical
+        container.spacing = 0
         
-        for i in 0..<self.numberOfProcesses {
-            let processView = ProcessView(CGFloat(i))
+        for _ in 0..<self.numberOfProcesses {
+            let processView = ProcessView()
             self.processes.append(processView)
-            container.addSubview(processView)
+            container.addArrangedSubview(processView)
         }
         
         view.addSubview(separator)
@@ -213,18 +213,18 @@ internal class Popup: NSView, Popup_p {
     public func loadCallback(_ value: RAM_Usage) {
         DispatchQueue.main.async(execute: {
             if (self.window?.isVisible ?? false) || !self.initialized {
-                self.activeField?.stringValue = Units(bytes: Int64(value.active)).getReadableMemory()
+                self.appField?.stringValue = Units(bytes: Int64(value.app)).getReadableMemory()
                 self.inactiveField?.stringValue = Units(bytes: Int64(value.inactive)).getReadableMemory()
                 self.wiredField?.stringValue = Units(bytes: Int64(value.wired)).getReadableMemory()
                 self.compressedField?.stringValue = Units(bytes: Int64(value.compressed)).getReadableMemory()
-                self.swapField?.stringValue = Units(bytes: Int64(value.swap.free)).getReadableMemory()
+                self.swapField?.stringValue = Units(bytes: Int64(value.swap.used)).getReadableMemory()
                 
                 self.usedField?.stringValue = Units(bytes: Int64(value.used)).getReadableMemory()
                 self.freeField?.stringValue = Units(bytes: Int64(value.free)).getReadableMemory()
                 
                 self.circle?.setValue(value.usage)
                 self.circle?.setSegments([
-                    circle_segment(value: value.active/value.total, color: NSColor.systemBlue),
+                    circle_segment(value: value.app/value.total, color: NSColor.systemBlue),
                     circle_segment(value: value.wired/value.total, color: NSColor.systemOrange),
                     circle_segment(value: value.compressed/value.total, color: NSColor.systemPink)
                 ])
@@ -249,10 +249,8 @@ internal class Popup: NSView, Popup_p {
             }
             
             for i in 0..<list.count {
-                let process = list[i]
-                let index = list.count-i-1
-                self.processes[index].attachProcess(process)
-                self.processes[index].value = Units(bytes: Int64(process.usage)).getReadableMemory()
+                self.processes[i].set(list[i])
+                self.processes[i].value = Units(bytes: Int64(list[i].usage)).getReadableMemory()
             }
             
             self.processesInitialized = true
@@ -264,7 +262,7 @@ public class PressureView: NSView {
     private let segments: [circle_segment] = [
         circle_segment(value: 1/3, color: NSColor.systemGreen),
         circle_segment(value: 1/3, color: NSColor.systemYellow),
-        circle_segment(value: 1/3, color: NSColor.systemRed),
+        circle_segment(value: 1/3, color: NSColor.systemRed)
     ]
     
     private var level: Int = 1
@@ -306,7 +304,7 @@ public class PressureView: NSView {
         switch self.level {
         case 1: // NORMAL
             needlePath.move(to: CGPoint(x: self.bounds.width * 0.15, y: self.bounds.width * 0.40))
-            needlePath.line(to: CGPoint(x: self.bounds.width/2 , y: self.bounds.height/2 - needleEndSize))
+            needlePath.line(to: CGPoint(x: self.bounds.width/2, y: self.bounds.height/2 - needleEndSize))
             needlePath.line(to: CGPoint(x: self.bounds.width/2, y: self.bounds.height/2 + needleEndSize))
         case 2: // WARN
             needlePath.move(to: CGPoint(x: self.bounds.width/2, y: self.bounds.width * 0.85))
@@ -314,7 +312,7 @@ public class PressureView: NSView {
             needlePath.line(to: CGPoint(x: self.bounds.width/2 + needleEndSize, y: self.bounds.height/2))
         case 4: // CRITICAL
             needlePath.move(to: CGPoint(x: self.bounds.width * 0.85, y: self.bounds.width * 0.40))
-            needlePath.line(to: CGPoint(x: self.bounds.width/2 , y: self.bounds.height/2 - needleEndSize))
+            needlePath.line(to: CGPoint(x: self.bounds.width/2, y: self.bounds.height/2 - needleEndSize))
             needlePath.line(to: CGPoint(x: self.bounds.width/2, y: self.bounds.height/2 + needleEndSize))
         default: break
         }

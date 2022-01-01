@@ -9,21 +9,41 @@
 //  Copyright © 2020 Serhiy Mytrovtsiy. All rights reserved.
 //
 
+// Modules
+"CPU" = "Procesor";
+"Open CPU settings" = "Otwórz ustawienia procesora";
+"GPU" = "Grafika";
+"Open GPU settings" = "Otwórz ustawienia grafiki";
+"RAM" = "Pamięć";
+"Open RAM settings" = "Otwórz ustawienia pamięci";
+"Disk" = "Dysk";
+"Open Disk settings" = "Otwórz ustawienia dysku";
+"Sensors" = "Czujniki";
+"Open Sensors settings" = "Otwórz ustawienia czujników";
+"Fans" = "Wentylatory";
+"Open Fans settings" = "Otwórz ustawienia wentylatorów";
+"Network" = "Sieć";
+"Open Network settings" = "Otwórz ustawienia sieci";
+"Battery" = "Bateria";
+"Open Battery settings" = "Otwórz ustawienia baterii";
+"Bluetooth" = "Bluetooth";
+"Open Bluetooth settings" = "Otwórz ustawienia bluetooth";
+
 // Words
 "Unknown" = "Nieznany";
 "Version" = "Wersja";
 "Processor" = "Procesor";
 "Memory" = "Pamięć";
 "Graphics" = "Grafika";
-"Disk" = "Dysk";
 "Close" = "Zamknij";
 "Download" = "Pobierz";
 "Install" = "Zainstaluj";
-"Cancel" = "Cancel";
+"Cancel" = "Anuluj";
 "Unavailable" = "Niedostępny";
 "Yes" = "Tak";
 "No" = "Nie";
 "Automatic" = "Automatyczny";
+"Manual" = "Ręczny";
 "None" = "Brak";
 "Dots" = "Punkty";
 "Arrows" = "Strzałki";
@@ -31,32 +51,51 @@
 "Short" = "Krótki";
 "Long" = "Długi";
 "Statistics" = "Statystyki";
+"Max" = "Max";
+"Min" = "Min";
+"Reset" = "Zresetować";
+"Alignment" = "Wyrównanie";
+"Left alignment" = "Do lewej";
+"Center alignment" = "Centrum";
+"Right alignment" = "Do prawej";
+"Dashboard" = "Dashboard";
+"Disabled" = "Wyłączone";
 
 // Alerts
-"New version available" = "Nowa wersja dostępna";
-"Click to install the new version of Stats" = "Kliknij aby zainstalować nową wersję";
+"New version available" = "Dostępna nowa wersja";
+"Click to install the new version of Stats" = "Kliknij, aby zainstalować nową wersję";
 "Successfully updated" = "Zaktualizowano pomyślnie";
 "Stats was updated to v" = "Stats został zaktualizowany do v%0";
 
 // Settings
-"Open Activity Monitor" = "Otwórz Activity Monitor";
+"Open Activity Monitor" = "Otwórz Monitor Aktywności";
 "Report a bug" = "Zgłoś problem";
+"Support the application" = "Wesprzyj rozwój programu";
 "Close application" = "Zamknij program";
-"Open application settings" = "Otwórz ustawienie";
-"Open moduleName settings" = "Otwórz ustawienie %0";
+"Open application settings" = "Otwórz ustawienia";
+"Open dashboard" = "Otwórz dashboard";
 
 // Application settings
 "Update application" = "Aktualizuj aplikacje";
 "Check for updates" = "Sprawdzaj aktualizacje";
+"At start" = "Przy uruchomieniu";
+"Once per day" = "Raz dziennie";
+"Once per week" = "Raz w tygodniu";
+"Once per month" = "Raz w miesiącu";
+"Never" = "Nigdy";
 "Check for update" = "Sprawdź aktualizacje";
 "Show icon in dock" = "Pokazuj ikonę w docku";
-"Start at login" = "Uruchamiać przy logowaniu";
+"Start at login" = "Uruchom przy logowaniu";
+
+// Dashboard
+"Serial number" = "Numer seryjny";
+"Uptime" = "Czas pracy";
 
 // Update
 "The latest version of Stats installed" = "Najnowsza wersja Stats zainstalowana";
 "Downloading..." = "Pobieranie...";
-"Current version: " = "Aktualna wersja:     ";
-"Latest version: " = "Najnowsza wersja:  ";
+"Current version: " = "Aktualna wersja: ";
+"Latest version: " = "Najnowsza wersja: ";
 
 // Widgets
 "Color" = "Kolor";
@@ -72,18 +111,34 @@
 "Display mode" = "Tryb wyświetlania";
 "One row" = "Jeden wiersz";
 "Two rows" = "Dwa wiersze";
+"Mini widget" = "Mini";
+"Line chart widget" = "Wykres liniowy";
+"Bar chart widget" = "Wykres słupkowy";
+"Pie chart widget" = "Wykres kołowy";
+"Network chart widget" = "Wykres sieciowy";
+"Speed widget" = "Prędkość";
+"Battery widget" = "Bateria";
+"Text widget" = "Tekst";
+"Memory widget" = "Pamięć";
+"Static width" = "Statyczna szerokość";
+"Tachometer widget" = "Tachometr";
+"Show symbols" = "Pokaż symbole";
+"Label widget" = "Etykieta";
+"Number of reads in the chart" = "Liczba odczytów na wykresie";
 
 // Module Kit
-"Open module settings" = "Otwórz ustawienie modulu";
-"Select widget" = "Wybierz %0 widget";
+"Open module settings" = "Otwórz ustawienia modułu";
+"Select widget" = "Wybierz %0 widżet";
+"Open widget settings" = "Otwórz ustawienia widgetu";
 "Update interval" = "Interwał odświeżania";
-"Usage history" = "Historia zużycia";
+"Usage history" = "Historia użycia";
 "Details" = "Szczegóły";
 "Top processes" = "Top procesy";
 "Pictogram" = "Ikonka";
 
 // Modules
 "Number of top processes" = "Liczba procesów";
+"Update interval for top processes" = "Interwał odświeżania procesów";
 
 // CPU
 "CPU usage" = "Obciążenie procesora";
@@ -91,19 +146,37 @@
 "CPU frequency" = "Częstotliwość procesora";
 "System" = "System";
 "User" = "Użytkownik";
-"Idle" = "Bezczynna";
+"Idle" = "Nieaktywny";
 "Show usage per core" = "Pokaż obciążenie na rdzeń";
 "Show hyper-threading cores" = "Pokaż rdzenie Hyper-Threading";
+"Split the value (System/User)" = "Podzielić wartość (System/Użytkownik)";
+"Scheduler limit" = "Ograniczenie planisty";
+"Speed limit" = "Ograniczenie prędkości";
+"Average load" = "Średnie obciążenie";
+"1 minute" = "1 minuta";
+"5 minutes" = "5 minut";
+"15 minutes" = "15 minut";
 
 // GPU
-"GPU to show" = "GPU do wyświetlania";
+"GPU to show" = "GPU do wyświetlenia";
 "Show GPU type" = "Pokaż typ GPU";
+"GPU enabled" = "GPU włączone";
+"GPU disabled" = "GPU wyłączone";
 "GPU temperature" = "Temperatura GPU";
-"GPU utilization" = "Obciążenie GPU";
+"GPU utilization" = "Wykorzystanie GPU";
+"Vendor" = "Vendor";
+"Model" = "Model";
+"Status" = "Status";
+"Active" = "Aktywny";
+"Non active" = "Nieaktywny";
+"Fan speed" = "Prędkość wentylatora";
+"Core clock" = "Taktowanie rdzenia";
+"Memory clock" = "Taktowanie pamięci";
+"Utilization" = "Wykorzystanie";
 
-// Memory
-"Memory usage" = "Wykorzystanie pamięci";
-"Memory pressure" = "Poziom obciążenia";
+// RAM
+"Memory usage" = "Użycie pamięci";
+"Memory pressure" = "Obciążenie pamięci";
 "Total" = "Całość";
 "Used" = "Użyta";
 "App" = "Aplikacje";
@@ -111,6 +184,7 @@
 "Compressed" = "Skompresowana";
 "Free" = "Wolna";
 "Swap" = "Pamięć wymiany";
+"Split the value (App/Wired/Compressed)" = "Podzielić wartość (Aplikacje/Układowa/Skompresowana)";
 
 // Disk
 "Show removable disks" = "Pokaż dyski wymienne";
@@ -124,52 +198,93 @@
 "Temperature unit" = "Jednostka temperatury";
 "Celsius" = "Celsjusz";
 "Fahrenheit" = "Fahrenheit";
+"Save the fan speed" = "Zapisz prędkość wentylatora";
+"Fan" = "Wentylator";
 
 // Network
-"Uploading" = "Wysyłka";
+"Uploading" = "Wysyłanie";
 "Downloading" = "Pobieranie";
 "Public IP" = "Publiczny IP";
 "Local IP" = "Lokalny IP";
 "Interface" = "Interfejs";
-"Network" = "Sieć";
 "Physical address" = "Adres fizyczny";
-"Click to copy public IP address" = "Kliknij aby skopiować publiczny adres IP";
-"Click to copy local IP address" = "Kliknij aby skopiować lokalny adres IP";
-"Click to copy wifi name" = "Kliknij aby skopiować nazwę Wi-Fi";
-"Click to copy mac address" = "Kliknij aby skopiować adres fizyczny";
+"Refresh" = "Odśwież";
+"Click to copy public IP address" = "Kliknij, aby skopiować publiczny adres IP";
+"Click to copy local IP address" = "Kliknij, aby skopiować lokalny adres IP";
+"Click to copy wifi name" = "Kliknij, aby skopiować nazwę Wi-Fi";
+"Click to copy mac address" = "Kliknij, aby skopiować adres fizyczny";
 "No connection" = "Brak połączenia";
 "Network interface" = "Interfejs sieciowy";
 "Total download" = "Całkowicie pobrano";
-"Total upload" = "Całkowicie przesłano";
+"Total upload" = "Całkowicie wysłano";
 "Reader type" = "Sposób odczytu";
 "Interface based" = "Interfejs";
 "Processes based" = "Procesy";
+"Reset data usage" = "Resetuj użycie danych";
 
 // Battery
 "Level" = "Poziom naładowania";
 "Source" = "Źródło";
+"AC Power" = "Zasilacz";
+"Battery Power" = "Bateria";
 "Time" = "Czas";
 "Health" = "Zdrowie";
-"Battery" = "Bateria";
 "Amperage" = "Natężenie";
 "Voltage" = "Napięcie";
+"Cycles" = "Liczba cykli";
 "Temperature" = "Temperatura";
 "Power adapter" = "Zasilacz";
 "Power" = "Moc";
 "Is charging" = "Ładuje";
 "Time to discharge" = "Czas do rozładowania";
 "Time to charge" = "Czas do naładowania";
-"Calculating" = "Obliczenie";
+"Calculating" = "Obliczanie";
 "Fully charged" = "W pełni naładowana";
 "Not connected" = "Nie podłączona";
 "Low level notification" = "Powiadomienie o niskim poziomie";
+"High level notification" = "Powiadomienie o wysokim poziomie";
 "Low battery" = "Niski poziom baterii";
+"High battery" = "Wysoki poziom baterii";
 "Battery remaining" = "Pozostało %0%";
+"Battery remaining to full charge" = "%0% do pełnego naładowania";
 "Percentage" = "Procenty";
 "Percentage and time" = "Procenty i czas";
 "Time and percentage" = "Czas i procenty";
 "Time format" = "Format czasu";
 "Hide additional information when full" = "Ukryj dodatkowe informacje, gdy bateria jest naładowana";
+"Last charge" = "Ostatnie ładowanie";
 
-// Fans
-"Fans" = "Fans";
+// Bluetooth
+"Battery to show" = "Bateria do wyświetlenia";
+
+// Colors
+"Based on utilization" = "Na podstawie wykorzystania";
+"Based on pressure" = "Na podstawie obciążenia";
+"System accent" = "Akcent systemowy";
+"Monochrome accent" = "Akcent monochromatyczny";
+"Clear" = "Przezroczysty";
+"White" = "Biały";
+"Black" = "Czarny";
+"Gray" = "Szary";
+"Second gray" = "Drugi szary";
+"Dark gray" = "Ciemno szary";
+"Light gray" = "Jasno szary";
+"Red" = "Czerwony";
+"Second red" = "Drugi czerwony";
+"Green" = "Zielony";
+"Second green" = "Drugi zielony";
+"Blue" = "Niebieski";
+"Second blue" = "Drugi niebieski";
+"Yellow" = "Żółty";
+"Second yellow" = "Drugi żółty";
+"Orange" = "Pomarańczowy";
+"Second orange" = "Drugi pomarańczowy";
+"Purple" = "Fioletowy";
+"Second purple" = "Drugi fioletowy";
+"Brown" = "Brązowy";
+"Second brown" = "Drugi brązowy";
+"Cyan" = "Cyjan";
+"Magenta" = "Magenta";
+"Pink" = "Różowy";
+"Teal" = "Morski";
+"Indigo" = "Indygo";

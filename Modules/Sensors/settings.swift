@@ -10,88 +10,97 @@
 //
 
 import Cocoa
-import StatsKit
-import ModuleKit
+import Kit
 
-internal class Settings: NSView, Settings_v {
+internal class Settings: NSStackView, Settings_v {
     private var updateIntervalValue: Int = 3
     
     private let title: String
-    private let store: UnsafePointer<Store>
     private var button: NSPopUpButton?
-    private let list: UnsafeMutablePointer<[Sensor_t]>
+    private let list: [Sensor_p]
     public var callback: (() -> Void) = {}
     public var setInterval: ((_ value: Int) -> Void) = {_ in }
     
-    public init(_ title: String, store: UnsafePointer<Store>, list: UnsafeMutablePointer<[Sensor_t]>) {
+    public init(_ title: String, list: [Sensor_p]) {
         self.title = title
-        self.store = store
         self.list = list
         
-        super.init(frame: CGRect(
-            x: 0,
-            y: 0,
-            width: Constants.Settings.width - (Constants.Settings.margin*2),
-            height: 0
-        ))
+        super.init(frame: NSRect(x: 0, y: 0, width: 0, height: 0))
         
         self.wantsLayer = true
-        self.canDrawConcurrently = true
+        self.orientation = .vertical
+        self.distribution = .gravityAreas
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.edgeInsets = NSEdgeInsets(
+            top: Constants.Settings.margin,
+            left: Constants.Settings.margin,
+            bottom: Constants.Settings.margin,
+            right: Constants.Settings.margin
+        )
+        self.spacing = Constants.Settings.margin
         
-        self.updateIntervalValue = store.pointee.int(key: "\(self.title)_updateInterval", defaultValue: self.updateIntervalValue)
+        self.updateIntervalValue = Store.shared.int(key: "\(self.title)_updateInterval", defaultValue: self.updateIntervalValue)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func load(widget: widget_t) {
-        guard !self.list.pointee.isEmpty else {
+    public func load(widgets: [widget_t]) {
+        guard !self.list.isEmpty else {
             return
         }
         self.subviews.forEach{ $0.removeFromSuperview() }
         
-        var types: [SensorType_t] = []
-        self.list.pointee.forEach { (s: Sensor_t) in
+        var types: [SensorType] = []
+        self.list.forEach { (s: Sensor_p) in
             if !types.contains(s.type) {
                 types.append(s.type)
             }
         }
         
-        let rowHeight: CGFloat = 30
-        let settingsHeight: CGFloat = (rowHeight*1) + Constants.Settings.margin
-        let sensorsListHeight: CGFloat = (rowHeight+Constants.Settings.margin) * CGFloat(self.list.pointee.count) + ((rowHeight+Constants.Settings.margin) * CGFloat(types.count) + 1)
-        let height: CGFloat = settingsHeight + sensorsListHeight
-        let x: CGFloat = height < 360 ? 0 : Constants.Settings.margin
-        let view: NSView = NSView(frame: NSRect(
-            x: Constants.Settings.margin,
-            y: Constants.Settings.margin,
-            width: self.frame.width - (Constants.Settings.margin*2) - x,
-            height: height
-        ))
-        
-        self.addSubview(SelectTitleRow(
-            frame: NSRect(x: Constants.Settings.margin, y: height - rowHeight, width: view.frame.width, height: rowHeight),
-            title: LocalizedString("Update interval"),
+        self.addArrangedSubview(selectSettingsRowV1(
+            title: localizedString("Update interval"),
             action: #selector(changeUpdateInterval),
             items: ReaderUpdateIntervals.map{ "\($0) sec" },
             selected: "\(self.updateIntervalValue) sec"
         ))
         
-        var y: CGFloat = 0
-        types.reversed().forEach { (typ: SensorType_t) in
-            let filtered = self.list.pointee.filter{ $0.type == typ }
-            var groups: [SensorGroup_t] = []
-            filtered.forEach { (s: Sensor_t) in
+        types.forEach { (typ: SensorType) in
+            let header = NSStackView()
+            header.heightAnchor.constraint(equalToConstant: Constants.Settings.row).isActive = true
+            header.spacing = 0
+            
+            let titleField: NSTextField = LabelField(frame: NSRect(x: 0, y: 0, width: 0, height: 0), localizedString(typ.rawValue))
+            titleField.font = NSFont.systemFont(ofSize: 13, weight: .medium)
+            titleField.textColor = .labelColor
+            
+            header.addArrangedSubview(titleField)
+            header.addArrangedSubview(NSView())
+            
+            self.addArrangedSubview(header)
+            
+            let filtered = self.list.filter{ $0.type == typ }
+            var groups: [SensorGroup] = []
+            filtered.forEach { (s: Sensor_p) in
                 if !groups.contains(s.group) {
                     groups.append(s.group)
                 }
             }
             
-            groups.reversed().forEach { (group: SensorGroup_t) in
-                filtered.reversed().filter{ $0.group == group }.forEach { (s: Sensor_t) in
-                    let row: NSView = ToggleTitleRow(
-                        frame: NSRect(x: 0, y: y, width: view.frame.width, height: rowHeight),
+            let container = NSStackView()
+            container.orientation = .vertical
+            container.edgeInsets = NSEdgeInsets(
+                top: 0,
+                left: Constants.Settings.margin,
+                bottom: 0,
+                right: Constants.Settings.margin
+            )
+            container.spacing = 0
+            
+            groups.forEach { (group: SensorGroup) in
+                filtered.filter{ $0.group == group }.forEach { (s: Sensor_p) in
+                    let row: NSView = toggleSettingRow(
                         title: s.name,
                         action: #selector(self.handleSelection),
                         state: s.state
@@ -99,24 +108,12 @@ internal class Settings: NSView, Settings_v {
                     row.subviews.filter{ $0 is NSControl }.forEach { (control: NSView) in
                         control.identifier = NSUserInterfaceItemIdentifier(rawValue: s.key)
                     }
-                    view.addSubview(row)
-                    y += rowHeight + Constants.Settings.margin
+                    container.addArrangedSubview(row)
                 }
             }
-            
-            let rowTitleView: NSView = NSView(frame: NSRect(x: 0, y: y, width: view.frame.width, height: rowHeight))
-            let rowTitle: NSTextField = LabelField(frame: NSRect(x: 0, y: (rowHeight-19)/2, width: view.frame.width, height: 19), LocalizedString(typ))
-            rowTitle.font = NSFont.systemFont(ofSize: 14, weight: .regular)
-            rowTitle.textColor = .secondaryLabelColor
-            rowTitle.alignment = .center
-            rowTitleView.addSubview(rowTitle)
-            
-            view.addSubview(rowTitleView)
-            y += rowHeight + Constants.Settings.margin
+
+            self.addArrangedSubview(container)
         }
-        
-        self.addSubview(view)
-        self.setFrameSize(NSSize(width: self.frame.width, height: height + (Constants.Settings.margin*1)))
     }
     
     @objc private func handleSelection(_ sender: NSControl) {
@@ -129,14 +126,14 @@ internal class Settings: NSView, Settings_v {
             state = sender is NSButton ? (sender as! NSButton).state: nil
         }
         
-        self.store.pointee.set(key: "sensor_\(id.rawValue)", value:  state! == NSControl.StateValue.on)
+        Store.shared.set(key: "sensor_\(id.rawValue)", value: state! == NSControl.StateValue.on)
         self.callback()
     }
     
     @objc private func changeUpdateInterval(_ sender: NSMenuItem) {
         if let value = Int(sender.title.replacingOccurrences(of: " sec", with: "")) {
             self.updateIntervalValue = value
-            self.store.pointee.set(key: "\(self.title)_updateInterval", value: value)
+            Store.shared.set(key: "\(self.title)_updateInterval", value: value)
             self.setInterval(value)
         }
     }

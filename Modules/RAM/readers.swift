@@ -10,9 +10,7 @@
 //
 
 import Cocoa
-import StatsKit
-import ModuleKit
-import os.log
+import Kit
 
 internal class UsageReader: Reader<RAM_Usage> {
     public var totalSize: Double = 0
@@ -33,7 +31,7 @@ internal class UsageReader: Reader<RAM_Usage> {
         }
         
         self.totalSize = 0
-        os_log(.error, log: log, "host_info(): %s", "\((String(cString: mach_error_string(kerr), encoding: String.Encoding.ascii) ?? "unknown error"))")
+        error("host_info(): \(String(cString: mach_error_string(kerr), encoding: String.Encoding.ascii) ?? "unknown error")", log: self.log)
     }
     
     public override func read() {
@@ -48,31 +46,37 @@ internal class UsageReader: Reader<RAM_Usage> {
         
         if result == KERN_SUCCESS {
             let active = Double(stats.active_count) * Double(vm_page_size)
+            let speculative = Double(stats.speculative_count) * Double(vm_page_size)
             let inactive = Double(stats.inactive_count) * Double(vm_page_size)
             let wired = Double(stats.wire_count) * Double(vm_page_size)
             let compressed = Double(stats.compressor_page_count) * Double(vm_page_size)
+            let purgeable = Double(stats.purgeable_count) * Double(vm_page_size)
+            let external = Double(stats.external_page_count) * Double(vm_page_size)
             
-            let used = active + wired + compressed
+            let used = active + inactive + speculative + wired + compressed - purgeable - external
             let free = self.totalSize - used
             
-            var int_size: size_t = MemoryLayout<uint>.size
+            var intSize: size_t = MemoryLayout<uint>.size
             var pressureLevel: Int = 0
-            sysctlbyname("kern.memorystatus_vm_pressure_level", &pressureLevel, &int_size, nil, 0)
+            sysctlbyname("kern.memorystatus_vm_pressure_level", &pressureLevel, &intSize, nil, 0)
             
-            var string_size: size_t = MemoryLayout<xsw_usage>.size
+            var stringSize: size_t = MemoryLayout<xsw_usage>.size
             var swap: xsw_usage = xsw_usage()
-            sysctlbyname("vm.swapusage", &swap, &string_size, nil, 0)
+            sysctlbyname("vm.swapusage", &swap, &stringSize, nil, 0)
             
             self.callback(RAM_Usage(
+                total: self.totalSize,
+                used: used,
+                free: free,
+                
                 active: active,
                 inactive: inactive,
                 wired: wired,
                 compressed: compressed,
                 
-                usage: Double((self.totalSize - free) / self.totalSize),
-                total: Double(self.totalSize),
-                used: Double(used),
-                free: Double(free),
+                app: used - wired - compressed,
+                cache: purgeable + external,
+                pressure: 100.0 * (wired + compressed) / self.totalSize,
                 
                 pressureLevel: pressureLevel,
                 
@@ -85,31 +89,29 @@ internal class UsageReader: Reader<RAM_Usage> {
             return
         }
         
-        os_log(.error, log: log, "host_statistics64(): %s", "\((String(cString: mach_error_string(result), encoding: String.Encoding.ascii) ?? "unknown error"))")
+        error("host_statistics64(): \(String(cString: mach_error_string(result), encoding: String.Encoding.ascii) ?? "unknown error")", log: self.log)
     }
 }
 
 public class ProcessReader: Reader<[TopProcess]> {
-    private let store: UnsafePointer<Store>
-    private let title: String
+    private let title: String = "RAM"
     
     private var numberOfProcesses: Int {
         get {
-            return self.store.pointee.int(key: "\(self.title)_processes", defaultValue: 8)
+            return Store.shared.int(key: "\(self.title)_processes", defaultValue: 8)
         }
-    }
-    
-    init(_ title: String, store: UnsafePointer<Store>) {
-        self.title = title
-        self.store = store
-        super.init()
     }
     
     public override func setup() {
         self.popup = true
+        self.setInterval(Store.shared.int(key: "\(self.title)_updateTopInterval", defaultValue: 1))
     }
     
     public override func read() {
+        if self.numberOfProcesses == 0 {
+            return
+        }
+        
         let task = Process()
         task.launchPath = "/usr/bin/top"
         task.arguments = ["-l", "1", "-o", "mem", "-n", "\(self.numberOfProcesses)", "-stats", "pid,command,mem"]
@@ -117,13 +119,18 @@ public class ProcessReader: Reader<[TopProcess]> {
         let outputPipe = Pipe()
         let errorPipe = Pipe()
         
+        defer {
+            outputPipe.fileHandleForReading.closeFile()
+            errorPipe.fileHandleForReading.closeFile()
+        }
+        
         task.standardOutput = outputPipe
         task.standardError = errorPipe
         
         do {
             try task.run()
-        } catch let error {
-            os_log(.error, log: log, "top(): %s", "\(error.localizedDescription)")
+        } catch let err {
+            error("top(): \(err.localizedDescription)", log: self.log)
             return
         }
         
@@ -137,23 +144,23 @@ public class ProcessReader: Reader<[TopProcess]> {
         }
         
         var processes: [TopProcess] = []
-        output.enumerateLines { (line, _) -> () in
-            if line.matches("^\\d+ +.* +\\d+[A-Z]* *$") {
+        output.enumerateLines { (line, _) -> Void in
+            if line.matches("^\\d+ +.* +\\d+[A-Z]*\\+?\\-? *$") {
                 var str = line.trimmingCharacters(in: .whitespaces)
                 let pidString = str.findAndCrop(pattern: "^\\d+")
-                let usageString = str.suffix(5)
+                let usageString = str.suffix(6)
                 var command = str.replacingOccurrences(of: pidString, with: "")
                 command = command.replacingOccurrences(of: usageString, with: "")
                 
                 if let regex = try? NSRegularExpression(pattern: " (\\+|\\-)*$", options: .caseInsensitive) {
-                    command = regex.stringByReplacingMatches(in: command, options: [], range: NSRange(location: 0, length:  command.count), withTemplate: "")
+                    command = regex.stringByReplacingMatches(in: command, options: [], range: NSRange(location: 0, length: command.count), withTemplate: "")
                 }
                 
                 let pid = Int(pidString.filter("01234567890.".contains)) ?? 0
                 var usage = Double(usageString.filter("01234567890.".contains)) ?? 0
-                if usageString.contains("G") {
+                if usageString.last == "G" {
                     usage *= 1024 // apply gigabyte multiplier
-                } else if usageString.contains("K") {
+                } else if usageString.last == "K" {
                     usage /= 1024 // apply kilobyte divider
                 }
                 

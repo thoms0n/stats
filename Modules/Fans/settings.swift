@@ -10,89 +10,88 @@
 //
 
 import Cocoa
-import StatsKit
-import ModuleKit
+import Kit
 
-internal class Settings: NSView, Settings_v {
+internal class Settings: NSStackView, Settings_v {
     private var updateIntervalValue: Int = 1
+    private var speedState: Bool = false
     
     private let title: String
-    private let store: UnsafePointer<Store>
     private var button: NSPopUpButton?
     private let list: UnsafeMutablePointer<[Fan]>
-    private var labelState: Bool = false
     
     public var callback: (() -> Void) = {}
     public var setInterval: ((_ value: Int) -> Void) = {_ in }
     
-    public init(_ title: String, store: UnsafePointer<Store>, list: UnsafeMutablePointer<[Fan]>) {
+    public init(_ title: String, list: UnsafeMutablePointer<[Fan]>) {
         self.title = title
-        self.store = store
         self.list = list
         
-        super.init(frame: CGRect(
-            x: 0,
-            y: 0,
-            width: Constants.Settings.width - (Constants.Settings.margin*2),
-            height: 0
-        ))
+        super.init(frame: NSRect(x: 0, y: 0, width: 0, height: 0))
         
         self.wantsLayer = true
-        self.canDrawConcurrently = true
+        self.orientation = .vertical
+        self.distribution = .gravityAreas
+        self.edgeInsets = NSEdgeInsets(
+            top: Constants.Settings.margin,
+            left: Constants.Settings.margin,
+            bottom: Constants.Settings.margin,
+            right: Constants.Settings.margin
+        )
+        self.spacing = Constants.Settings.margin
         
-        self.updateIntervalValue = store.pointee.int(key: "\(self.title)_updateInterval", defaultValue: self.updateIntervalValue)
-        self.labelState = store.pointee.bool(key: "\(self.title)_label", defaultValue: self.labelState)
+        self.updateIntervalValue = Store.shared.int(key: "\(self.title)_updateInterval", defaultValue: self.updateIntervalValue)
+        if Store.shared.exist(key: "\(self.title)_label") {
+            Store.shared.remove("\(self.title)_label")
+        }
+        self.speedState = Store.shared.bool(key: "\(self.title)_speed", defaultValue: self.speedState)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func load(widget: widget_t) {
-        guard !self.list.pointee.isEmpty else {
-            return
-        }
+    public func load(widgets: [widget_t]) {
         self.subviews.forEach{ $0.removeFromSuperview() }
         
-        let rowHeight: CGFloat = 30
-        let settingsHeight: CGFloat = rowHeight*2 + Constants.Settings.margin
-        let sensorsListHeight: CGFloat = (rowHeight+Constants.Settings.margin) * CGFloat(self.list.pointee.count) + ((rowHeight+Constants.Settings.margin))
-        let height: CGFloat = settingsHeight + sensorsListHeight
-        let x: CGFloat = height < 360 ? 0 : Constants.Settings.margin
-        let view: NSView = NSView(frame: NSRect(
-            x: Constants.Settings.margin,
-            y: Constants.Settings.margin,
-            width: self.frame.width - (Constants.Settings.margin*2) - x,
-            height: height
-        ))
-        
-        self.addSubview(SelectTitleRow(
-            frame: NSRect(x: Constants.Settings.margin, y: height - rowHeight, width: view.frame.width, height: rowHeight),
-            title: LocalizedString("Update interval"),
+        self.addArrangedSubview(selectSettingsRowV1(
+            title: localizedString("Update interval"),
             action: #selector(changeUpdateInterval),
             items: ReaderUpdateIntervals.map{ "\($0) sec" },
             selected: "\(self.updateIntervalValue) sec"
         ))
         
-        self.addSubview(ToggleTitleRow(
-            frame: NSRect(x: Constants.Settings.margin, y: height - rowHeight*2 - Constants.Settings.margin, width: view.frame.width, height: rowHeight),
-            title: LocalizedString("Label"),
-            action: #selector(toggleLabelState),
-            state: self.labelState
+        self.addArrangedSubview(toggleSettingRow(
+            title: localizedString("Save the fan speed"),
+            action: #selector(toggleSpeedState),
+            state: self.speedState
         ))
         
-        let rowTitleView: NSView = NSView(frame: NSRect(x: 0, y: height - (rowHeight*3) - Constants.Settings.margin*2, width: view.frame.width, height: rowHeight))
-        let rowTitle: NSTextField = LabelField(frame: NSRect(x: 0, y: (rowHeight-19)/2, width: view.frame.width, height: 19), LocalizedString("Fans"))
-        rowTitle.font = NSFont.systemFont(ofSize: 14, weight: .regular)
-        rowTitle.textColor = .secondaryLabelColor
-        rowTitle.alignment = .center
-        rowTitleView.addSubview(rowTitle)
-        view.addSubview(rowTitleView)
+        let header = NSStackView()
+        header.heightAnchor.constraint(equalToConstant: Constants.Settings.row).isActive = true
+        header.spacing = 0
         
-        var y: CGFloat = 0
-        self.list.pointee.reversed().forEach { (f: Fan) in
-            let row: NSView = ToggleTitleRow(
-                frame: NSRect(x: 0, y: y, width: view.frame.width, height: rowHeight),
+        let titleField: NSTextField = LabelField(frame: NSRect(x: 0, y: 0, width: 0, height: 0), localizedString("Fans"))
+        titleField.font = NSFont.systemFont(ofSize: 13, weight: .medium)
+        titleField.textColor = .labelColor
+        
+        header.addArrangedSubview(titleField)
+        header.addArrangedSubview(NSView())
+        
+        self.addArrangedSubview(header)
+        
+        let container = NSStackView()
+        container.orientation = .vertical
+        container.edgeInsets = NSEdgeInsets(
+            top: 0,
+            left: Constants.Settings.margin,
+            bottom: 0,
+            right: Constants.Settings.margin
+        )
+        container.spacing = 0
+        
+        self.list.pointee.forEach { (f: Fan) in
+            let row: NSView = toggleSettingRow(
                 title: f.name,
                 action: #selector(self.handleSelection),
                 state: f.state
@@ -100,15 +99,13 @@ internal class Settings: NSView, Settings_v {
             row.subviews.filter{ $0 is NSControl }.forEach { (control: NSView) in
                 control.identifier = NSUserInterfaceItemIdentifier(rawValue: "\(f.id)")
             }
-            view.addSubview(row)
-            y += rowHeight + Constants.Settings.margin
+            container.addArrangedSubview(row)
         }
         
-        self.addSubview(view)
-        self.setFrameSize(NSSize(width: self.frame.width, height: height + (Constants.Settings.margin*1)))
+        self.addArrangedSubview(container)
     }
     
-    @objc func handleSelection(_ sender: NSControl) {
+    @objc private func handleSelection(_ sender: NSControl) {
         guard let id = sender.identifier else { return }
         
         var state: NSControl.StateValue? = nil
@@ -118,19 +115,19 @@ internal class Settings: NSView, Settings_v {
             state = sender is NSButton ? (sender as! NSButton).state: nil
         }
         
-        self.store.pointee.set(key: "fan_\(id.rawValue)", value:  state! == NSControl.StateValue.on)
+        Store.shared.set(key: "fan_\(id.rawValue)", value: state! == NSControl.StateValue.on)
         self.callback()
     }
     
     @objc private func changeUpdateInterval(_ sender: NSMenuItem) {
         if let value = Int(sender.title.replacingOccurrences(of: " sec", with: "")) {
             self.updateIntervalValue = value
-            self.store.pointee.set(key: "\(self.title)_updateInterval", value: value)
+            Store.shared.set(key: "\(self.title)_updateInterval", value: value)
             self.setInterval(value)
         }
     }
     
-    @objc func toggleLabelState(_ sender: NSControl) {
+    @objc private func toggleSpeedState(_ sender: NSControl) {
         var state: NSControl.StateValue? = nil
         if #available(OSX 10.15, *) {
             state = sender is NSSwitch ? (sender as! NSSwitch).state: nil
@@ -138,8 +135,8 @@ internal class Settings: NSView, Settings_v {
             state = sender is NSButton ? (sender as! NSButton).state: nil
         }
         
-        self.labelState = state! == .on ? true : false
-        self.store.pointee.set(key: "\(self.title)_label", value: self.labelState)
+        self.speedState = state! == .on ? true : false
+        Store.shared.set(key: "\(self.title)_speed", value: self.speedState)
         self.callback()
     }
 }

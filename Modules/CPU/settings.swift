@@ -10,112 +10,153 @@
 //
 
 import Cocoa
-import StatsKit
-import ModuleKit
+import Kit
 
-internal class Settings: NSView, Settings_v {
+internal class Settings: NSStackView, Settings_v {
     private var usagePerCoreState: Bool = false
     private var hyperthreadState: Bool = false
+    private var splitValueState: Bool = false
+    private var IPGState: Bool = false
     private var updateIntervalValue: Int = 1
+    private var updateTopIntervalValue: Int = 1
     private var numberOfProcesses: Int = 8
     
     private let title: String
-    private let store: UnsafePointer<Store>
     private var hasHyperthreadingCores = false
     
     public var callback: (() -> Void) = {}
     public var callbackWhenUpdateNumberOfProcesses: (() -> Void) = {}
+    public var IPGCallback: ((_ state: Bool) -> Void) = {_ in }
     public var setInterval: ((_ value: Int) -> Void) = {_ in }
+    public var setTopInterval: ((_ value: Int) -> Void) = {_ in }
     
     private var hyperthreadView: NSView? = nil
+    private var splitValueView: NSView? = nil
     
-    public init(_ title: String, store: UnsafePointer<Store>) {
+    public init(_ title: String) {
         self.title = title
-        self.store = store
-        self.hyperthreadState = store.pointee.bool(key: "\(self.title)_hyperhreading", defaultValue: self.hyperthreadState)
-        self.usagePerCoreState = store.pointee.bool(key: "\(self.title)_usagePerCore", defaultValue: self.usagePerCoreState)
-        self.updateIntervalValue = store.pointee.int(key: "\(self.title)_updateInterval", defaultValue: self.updateIntervalValue)
-        self.numberOfProcesses = store.pointee.int(key: "\(self.title)_processes", defaultValue: self.numberOfProcesses)
+        self.hyperthreadState = Store.shared.bool(key: "\(self.title)_hyperhreading", defaultValue: self.hyperthreadState)
+        self.usagePerCoreState = Store.shared.bool(key: "\(self.title)_usagePerCore", defaultValue: self.usagePerCoreState)
+        self.splitValueState = Store.shared.bool(key: "\(self.title)_splitValue", defaultValue: self.splitValueState)
+        self.IPGState = Store.shared.bool(key: "\(self.title)_IPG", defaultValue: self.IPGState)
+        self.updateIntervalValue = Store.shared.int(key: "\(self.title)_updateInterval", defaultValue: self.updateIntervalValue)
+        self.updateTopIntervalValue = Store.shared.int(key: "\(self.title)_updateTopInterval", defaultValue: self.updateTopIntervalValue)
+        self.numberOfProcesses = Store.shared.int(key: "\(self.title)_processes", defaultValue: self.numberOfProcesses)
         if !self.usagePerCoreState {
             self.hyperthreadState = false
         }
-        self.hasHyperthreadingCores = SysctlByName("hw.physicalcpu") != SysctlByName("hw.logicalcpu")
+        self.hasHyperthreadingCores = sysctlByName("hw.physicalcpu") != sysctlByName("hw.logicalcpu")
         
-        super.init(frame: CGRect(
-            x: 0,
-            y: 0,
-            width: Constants.Settings.width - (Constants.Settings.margin*2),
-            height: 0
-        ))
+        super.init(frame: NSRect(x: 0, y: 0, width: 0, height: 0))
         
-        self.wantsLayer = true
-        self.canDrawConcurrently = true
+        self.orientation = .vertical
+        self.distribution = .gravityAreas
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.edgeInsets = NSEdgeInsets(
+            top: Constants.Settings.margin,
+            left: Constants.Settings.margin,
+            bottom: Constants.Settings.margin,
+            right: Constants.Settings.margin
+        )
+        self.spacing = Constants.Settings.margin
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func load(widget: widget_t) {
+    public func load(widgets: [widget_t]) {
         self.subviews.forEach{ $0.removeFromSuperview() }
         
-        let rowHeight: CGFloat = 30
-        let num: CGFloat = widget == .barChart ? self.hasHyperthreadingCores ? 3 : 2 : 1
+        var hasIPG = false
+        #if arch(x86_64)
+        let path: CFString = "/Library/Frameworks/IntelPowerGadget.framework" as CFString
+        let bundleURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path, CFURLPathStyle.cfurlposixPathStyle, true)
+        hasIPG = CFBundleCreate(kCFAllocatorDefault, bundleURL) != nil
+        #endif
         
-        self.addSubview(SelectTitleRow(
-            frame: NSRect(x: Constants.Settings.margin, y: Constants.Settings.margin + (rowHeight + Constants.Settings.margin) * num, width: self.frame.width - (Constants.Settings.margin*2), height: rowHeight),
-            title: LocalizedString("Update interval"),
+        self.addArrangedSubview(selectSettingsRowV1(
+            title: localizedString("Update interval"),
             action: #selector(changeUpdateInterval),
             items: ReaderUpdateIntervals.map{ "\($0) sec" },
             selected: "\(self.updateIntervalValue) sec"
         ))
         
-        if widget == .barChart {
-            self.addSubview(ToggleTitleRow(
-                frame: NSRect(x: Constants.Settings.margin, y: Constants.Settings.margin + (rowHeight + Constants.Settings.margin) * (num-1), width: self.frame.width - (Constants.Settings.margin*2), height: rowHeight),
-                title: LocalizedString("Show usage per core"),
+        self.addArrangedSubview(selectSettingsRowV1(
+            title: localizedString("Update interval for top processes"),
+            action: #selector(changeUpdateTopInterval),
+            items: ReaderUpdateIntervals.map{ "\($0) sec" },
+            selected: "\(self.updateTopIntervalValue) sec"
+        ))
+        
+        if !widgets.filter({ $0 == .barChart }).isEmpty {
+            self.addArrangedSubview(toggleSettingRow(
+                title: localizedString("Show usage per core"),
                 action: #selector(toggleUsagePerCore),
                 state: self.usagePerCoreState
             ))
             
             if self.hasHyperthreadingCores {
-                self.hyperthreadView = ToggleTitleRow(
-                    frame: NSRect(x: Constants.Settings.margin, y: Constants.Settings.margin + (rowHeight + Constants.Settings.margin) * (num-2), width: self.frame.width - (Constants.Settings.margin*2), height: rowHeight),
-                    title: LocalizedString("Show hyper-threading cores"),
+                self.hyperthreadView = toggleSettingRow(
+                    title: localizedString("Show hyper-threading cores"),
                     action: #selector(toggleMultithreading),
                     state: self.hyperthreadState
                 )
                 if !self.usagePerCoreState {
-                    FindAndToggleEnableNSControlState(self.hyperthreadView, state: false)
-                    FindAndToggleNSControlState(self.hyperthreadView, state: .off)
+                    findAndToggleEnableNSControlState(self.hyperthreadView, state: false)
+                    findAndToggleNSControlState(self.hyperthreadView, state: .off)
                 }
-                self.addSubview(self.hyperthreadView!)
+                self.addArrangedSubview(self.hyperthreadView!)
             }
+            
+            self.splitValueView = toggleSettingRow(
+                title: localizedString("Split the value (System/User)"),
+                action: #selector(toggleSplitValue),
+                state: self.splitValueState
+            )
+            if self.usagePerCoreState {
+                findAndToggleEnableNSControlState(self.splitValueView, state: false)
+                findAndToggleNSControlState(self.splitValueView, state: .off)
+            }
+            self.addArrangedSubview(self.splitValueView!)
         }
         
-        self.addSubview(SelectTitleRow(
-            frame: NSRect(x: Constants.Settings.margin, y: Constants.Settings.margin, width: self.frame.width - (Constants.Settings.margin*2), height: rowHeight),
-            title: LocalizedString("Number of top processes"),
+        if hasIPG {
+            self.addArrangedSubview(toggleSettingRow(
+                title: "\(localizedString("CPU frequency")) (IPG)",
+                action: #selector(toggleIPG),
+                state: self.IPGState
+            ))
+        }
+        
+        self.addArrangedSubview(selectSettingsRowV1(
+            title: localizedString("Number of top processes"),
             action: #selector(changeNumberOfProcesses),
             items: NumbersOfProcesses.map{ "\($0)" },
             selected: "\(self.numberOfProcesses)"
         ))
-        
-        self.setFrameSize(NSSize(width: self.frame.width, height: (rowHeight*(num+1)) + (Constants.Settings.margin*(2+num))))
     }
     
     @objc private func changeUpdateInterval(_ sender: NSMenuItem) {
         if let value = Int(sender.title.replacingOccurrences(of: " sec", with: "")) {
             self.updateIntervalValue = value
-            self.store.pointee.set(key: "\(self.title)_updateInterval", value: value)
+            Store.shared.set(key: "\(self.title)_updateInterval", value: value)
             self.setInterval(value)
+        }
+    }
+    
+    @objc private func changeUpdateTopInterval(_ sender: NSMenuItem) {
+        if let value = Int(sender.title.replacingOccurrences(of: " sec", with: "")) {
+            self.updateTopIntervalValue = value
+            Store.shared.set(key: "\(self.title)_updateTopInterval", value: value)
+            self.setTopInterval(value)
         }
     }
     
     @objc private func changeNumberOfProcesses(_ sender: NSMenuItem) {
         if let value = Int(sender.title) {
             self.numberOfProcesses = value
-            self.store.pointee.set(key: "\(self.title)_processes", value: value)
+            Store.shared.set(key: "\(self.title)_processes", value: value)
             self.callbackWhenUpdateNumberOfProcesses()
         }
     }
@@ -129,14 +170,20 @@ internal class Settings: NSView, Settings_v {
         }
         
         self.usagePerCoreState = state! == .on ? true : false
-        self.store.pointee.set(key: "\(self.title)_usagePerCore", value: self.usagePerCoreState)
+        Store.shared.set(key: "\(self.title)_usagePerCore", value: self.usagePerCoreState)
         self.callback()
         
-        FindAndToggleEnableNSControlState(self.hyperthreadView, state: self.usagePerCoreState)
+        findAndToggleEnableNSControlState(self.hyperthreadView, state: self.usagePerCoreState)
+        findAndToggleEnableNSControlState(self.splitValueView, state: !self.usagePerCoreState)
+        
         if !self.usagePerCoreState {
             self.hyperthreadState = false
-            self.store.pointee.set(key: "\(self.title)_hyperhreading", value: self.hyperthreadState)
-            FindAndToggleNSControlState(self.hyperthreadView, state: .off)
+            Store.shared.set(key: "\(self.title)_hyperhreading", value: self.hyperthreadState)
+            findAndToggleNSControlState(self.hyperthreadView, state: .off)
+        } else {
+            self.splitValueState = false
+            Store.shared.set(key: "\(self.title)_splitValue", value: self.splitValueState)
+            findAndToggleNSControlState(self.splitValueView, state: .off)
         }
     }
     
@@ -149,7 +196,33 @@ internal class Settings: NSView, Settings_v {
         }
         
         self.hyperthreadState = state! == .on ? true : false
-        self.store.pointee.set(key: "\(self.title)_hyperhreading", value: self.hyperthreadState)
+        Store.shared.set(key: "\(self.title)_hyperhreading", value: self.hyperthreadState)
+        self.callback()
+    }
+    
+    @objc func toggleIPG(_ sender: NSControl) {
+        var state: NSControl.StateValue? = nil
+        if #available(OSX 10.15, *) {
+            state = sender is NSSwitch ? (sender as! NSSwitch).state: nil
+        } else {
+            state = sender is NSButton ? (sender as! NSButton).state: nil
+        }
+        
+        self.IPGState = state! == .on ? true : false
+        Store.shared.set(key: "\(self.title)_IPG", value: self.IPGState)
+        self.IPGCallback(self.IPGState)
+    }
+    
+    @objc func toggleSplitValue(_ sender: NSControl) {
+        var state: NSControl.StateValue? = nil
+        if #available(OSX 10.15, *) {
+            state = sender is NSSwitch ? (sender as! NSSwitch).state: nil
+        } else {
+            state = sender is NSButton ? (sender as! NSButton).state: nil
+        }
+        
+        self.splitValueState = state! == .on ? true : false
+        Store.shared.set(key: "\(self.title)_splitValue", value: self.splitValueState)
         self.callback()
     }
 }

@@ -10,11 +10,8 @@
 //
 
 import Cocoa
-import StatsKit
-import ModuleKit
+import Kit
 import SystemConfiguration
-import Reachability
-import os.log
 import CoreWLAN
 
 struct ipResponse: Decodable {
@@ -24,9 +21,7 @@ struct ipResponse: Decodable {
 }
 
 internal class UsageReader: Reader<Network_Usage> {
-    public var store: UnsafePointer<Store>? = nil
-    
-    private var reachability: Reachability? = nil
+    private var reachability: Reachability = Reachability(start: true)
     private var usage: Network_Usage = Network_Usage()
     
     private var primaryInterface: String {
@@ -40,38 +35,57 @@ internal class UsageReader: Reader<Network_Usage> {
     
     private var interfaceID: String {
         get {
-            return self.store?.pointee.string(key: "Network_interface", defaultValue: self.primaryInterface) ?? self.primaryInterface
+            return Store.shared.string(key: "Network_interface", defaultValue: self.primaryInterface) 
         }
         set {
-            self.store?.pointee.set(key: "Network_interface", value: newValue)
+            Store.shared.set(key: "Network_interface", value: newValue)
         }
     }
     
     private var reader: String {
         get {
-            return self.store?.pointee.string(key: "Network_reader", defaultValue: "interface") ?? "interface"
+            return Store.shared.string(key: "Network_reader", defaultValue: "interface") 
+        }
+    }
+    
+    private var vpnConnection: Bool {
+        if let settings = CFNetworkCopySystemProxySettings()?.takeRetainedValue() as? [String: Any], let scopes = settings["__SCOPED__"] as? [String: Any] {
+            return !scopes.filter({ $0.key.contains("tap") || $0.key.contains("tun") || $0.key.contains("ppp") || $0.key.contains("ipsec") || $0.key.contains("ipsec0")}).isEmpty
+        }
+        return false
+    }
+    
+    private var VPNMode: Bool {
+        get {
+            return Store.shared.bool(key: "Network_VPNMode", defaultValue: false)
         }
     }
     
     public override func setup() {
-        do {
-            self.reachability = try Reachability()
-            try self.reachability!.startNotifier()
-        } catch let error {
-            os_log(.error, log: log, "initialize Reachability error %s", "\(error)")
-        }
-        
-        self.reachability!.whenReachable = { _ in
+        self.reachability.reachable = {
             if self.active {
                 self.getDetails()
             }
         }
-        self.reachability!.whenUnreachable = { _ in
+        self.reachability.unreachable = {
             if self.active {
                 self.usage.reset()
                 self.callback(self.usage)
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshPublicIP), name: .refreshPublicIP, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resetTotalNetworkUsage), name: .resetTotalNetworkUsage, object: nil)
+        
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 1) {
+            if self.active {
+                self.getDetails()
+            }
+        }
+    }
+    
+    public override func terminate() {
+        self.reachability.stop()
     }
     
     public override func read() {
@@ -90,6 +104,13 @@ internal class UsageReader: Reader<Network_Usage> {
         
         self.usage.total.upload += self.usage.bandwidth.upload
         self.usage.total.download += self.usage.bandwidth.download
+        
+        self.usage.status = self.reachability.isReachable
+        
+        if self.vpnConnection && self.VPNMode {
+            self.usage.bandwidth.upload /= 2
+            self.usage.bandwidth.download /= 2
+        }
         
         self.callback(self.usage)
         
@@ -135,13 +156,18 @@ internal class UsageReader: Reader<Network_Usage> {
         let outputPipe = Pipe()
         let errorPipe = Pipe()
         
+        defer {
+            outputPipe.fileHandleForReading.closeFile()
+            errorPipe.fileHandleForReading.closeFile()
+        }
+        
         task.standardOutput = outputPipe
         task.standardError = errorPipe
         
         do {
             try task.run()
-        } catch let error {
-            os_log(.error, log: log, "read bandwidth from processes %s", "\(error)")
+        } catch let err {
+            error("read bandwidth from processes: \(err)", log: self.log)
             return (0, 0)
         }
         
@@ -157,7 +183,7 @@ internal class UsageReader: Reader<Network_Usage> {
         var totalUpload: Int64 = 0
         var totalDownload: Int64 = 0
         var firstLine = false
-        output.enumerateLines { (line, _) -> () in
+        output.enumerateLines { (line, _) -> Void in
             if !firstLine {
                 firstLine = true
                 return
@@ -229,23 +255,26 @@ internal class UsageReader: Reader<Network_Usage> {
     }
     
     private func getPublicIP() {
-        let url = URL(string: "https://api.myip.com")
-        var address: String? = nil
-        
         do {
-            if let url = url {
-                address = try String(contentsOf: url)
-                
-                if address != nil {
-                    let jsonData = address!.data(using: .utf8)
-                    let response: ipResponse = try JSONDecoder().decode(ipResponse.self, from: jsonData!)
-                    
-                    self.usage.countryCode = response.cc
-                    self.usage.raddr = response.ip
+            if let url = URL(string: "https://api.ipify.org") {
+                let value = try String(contentsOf: url)
+                if !value.contains("<!DOCTYPE html>") && self.isIPv4(value) {
+                    self.usage.raddr.v4 = value
                 }
             }
-        } catch let error {
-            os_log(.error, log: log, "get public ip %s", "\(error)")
+        } catch let err {
+            error("get public ipv4: \(err)", log: self.log)
+        }
+        
+        do {
+            if let url = URL(string: "https://api64.ipify.org") {
+                let value = try String(contentsOf: url)
+                if self.usage.raddr.v4 != value && !self.isIPv4(value) {
+                    self.usage.raddr.v6 = value
+                }
+            }
+        } catch let err {
+            error("get public ipv6: \(err)", log: self.log)
         }
     }
     
@@ -259,36 +288,57 @@ internal class UsageReader: Reader<Network_Usage> {
         let data: UnsafeMutablePointer<if_data>? = unsafeBitCast(pointer.pointee.ifa_data, to: UnsafeMutablePointer<if_data>.self)
         return (upload: Int64(data?.pointee.ifi_obytes ?? 0), download: Int64(data?.pointee.ifi_ibytes ?? 0))
     }
+    
+    private func isIPv4(_ ip: String) -> Bool {
+        let arr = ip.split(separator: ".").compactMap{ Int($0) }
+        return arr.count == 4 && arr.filter{ $0 >= 0 && $0 < 256}.count == 4
+    }
+    
+    @objc func refreshPublicIP() {
+        self.usage.raddr.v4 = nil
+        self.usage.raddr.v6 = nil
+        
+        DispatchQueue.global(qos: .background).async {
+            self.getPublicIP()
+        }
+    }
+    
+    @objc func resetTotalNetworkUsage() {
+        self.usage.total = (0, 0)
+    }
 }
 
 public class ProcessReader: Reader<[Network_Process]> {
-    private let store: UnsafePointer<Store>
-    private let title: String
+    private let title: String = "Network"
     private var previous: [Network_Process] = []
     
     private var numberOfProcesses: Int {
         get {
-            return self.store.pointee.int(key: "\(self.title)_processes", defaultValue: 8)
+            return Store.shared.int(key: "\(self.title)_processes", defaultValue: 8)
         }
-    }
-    
-    init(_ title: String, store: UnsafePointer<Store>) {
-        self.title = title
-        self.store = store
-        super.init()
     }
     
     public override func setup() {
         self.popup = true
     }
     
+    // swiftlint:disable function_body_length
     public override func read() {
+        if self.numberOfProcesses == 0 {
+            return
+        }
+        
         let task = Process()
         task.launchPath = "/usr/bin/nettop"
         task.arguments = ["-P", "-L", "1", "-k", "time,interface,state,rx_dupe,rx_ooo,re-tx,rtt_avg,rcvsize,tx_win,tc_class,tc_mgt,cc_algo,P,C,R,W,arch"]
         
         let outputPipe = Pipe()
         let errorPipe = Pipe()
+        
+        defer {
+            outputPipe.fileHandleForReading.closeFile()
+            errorPipe.fileHandleForReading.closeFile()
+        }
         
         task.standardOutput = outputPipe
         task.standardError = errorPipe
@@ -308,10 +358,10 @@ public class ProcessReader: Reader<[Network_Process]> {
         if output.isEmpty {
             return
         }
-
+        
         var list: [Network_Process] = []
         var firstLine = false
-        output.enumerateLines { (line, _) -> () in
+        output.enumerateLines { (line, _) -> Void in
             if !firstLine {
                 firstLine = true
                 return
@@ -336,6 +386,10 @@ public class ProcessReader: Reader<[Network_Process]> {
                 process.name = nameArray.dropLast().joined(separator: ".")
             }
             
+            if process.name == "" {
+                process.name = process.pid
+            }
+            
             if let download = Int(parsedLine[1]) {
                 process.download = download
             }
@@ -347,7 +401,7 @@ public class ProcessReader: Reader<[Network_Process]> {
         }
         
         var processes: [Network_Process] = []
-        if self.previous.count == 0 {
+        if self.previous.isEmpty {
             self.previous = list
             processes = list
         } else {
@@ -367,7 +421,7 @@ public class ProcessReader: Reader<[Network_Process]> {
                         upload = 0
                     }
                     
-                    processes.append(Network_Process(time: time, name: p.name, pid: p.pid, download: download, upload:  upload, icon: p.icon))
+                    processes.append(Network_Process(time: time, name: p.name, pid: p.pid, download: download, upload: upload, icon: p.icon))
                 }
             }
             self.previous = list

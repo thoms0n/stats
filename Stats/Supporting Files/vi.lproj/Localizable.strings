@@ -9,13 +9,32 @@
 //  Copyright © 2020 Serhiy Mytrovtsiy. All rights reserved.
 //
 
+// Modules
+"CPU" = "CPU";
+"Open CPU settings" = "Mở cài đặt CPU";
+"GPU" = "GPU";
+"Open GPU settings" = "Mở cài đặt GPU";
+"RAM" = "RAM";
+"Open RAM settings" = "Mở cài đặt RAM";
+"Disk" = "Ổ đĩa";
+"Open Disk settings" = "Mở cài đặt Ổ đĩa";
+"Sensors" = "Cảm biến";
+"Open Sensors settings" = "Mở cài đặt cảm biến";
+"Fans" = "Quạt";
+"Open Fans settings" = "Mở cài đặt quạt";
+"Network" = "Mạng";
+"Open Network settings" = "Mở cài đặt mạng";
+"Battery" = "Pin";
+"Open Battery settings" = "Mở cài đặt Pin";
+"Bluetooth" = "Bluetooth";
+"Open Bluetooth settings" = "Mở cài đặt bluetooth";
+
 // Words
 "Unknown" = "Không xác định";
 "Version" = "Phiên bản";
 "Processor" = "Bộ xử lý";
 "Memory" = "Bộ nhớ";
 "Graphics" = "Đồ họa";
-"Disk" = "Ổ Đĩa";
 "Close" = "Đóng";
 "Download" = "Tải Xuống";
 "Install" = "Cài đặt";
@@ -24,6 +43,7 @@
 "Yes" = "Có";
 "No" = "Không";
 "Automatic" = "Tự động";
+"Manual" = "Thủ công";
 "None" = "Không có";
 "Dots" = "Dấu chấm";
 "Arrows" = "Mũi tên";
@@ -31,6 +51,15 @@
 "Short" = "Ngắn";
 "Long" = "Dài";
 "Statistics" = "Số liệu thống kê";
+"Max" = "Tối đa";
+"Min" = "Tối thiểu";
+"Reset" = "Khôi phục mặc định";
+"Alignment" = "Căn chỉnh";
+"Left alignment" = "Trái";
+"Center alignment" = "Giữa";
+"Right alignment" = "Phải";
+"Dashboard" = "Bảng điều khiển";
+"Disabled" = "Vô hiệu hóa";
 
 // Alerts
 "New version available" = "Phiên bản mới có sẵn";
@@ -41,16 +70,26 @@
 // Settings
 "Open Activity Monitor" = "Mở trình Giám sát hoạt động";
 "Report a bug" = "Báo cáo lỗi";
+"Support the application" = "Hỗ trợ ứng dụng";
 "Close application" = "Đóng ứng dụng";
 "Open application settings" = "Mở cài đặt ứng dụng";
-"Open moduleName settings" = "Mở cài đặt %0";
+"Open dashboard" = "Mở bảng điều khiển";
 
 // Application settings
 "Update application" = "Cập nhật ứng dụng";
 "Check for updates" = "Kiểm tra các cập nhật";
+"At start" = "Khi bắt đầu";
+"Once per day" = "Một lần một ngày";
+"Once per week" = "Một tuần một lần";
+"Once per month" = "Mỗi tháng một lần";
+"Never" = "Never";
 "Check for update" = "Kiểm tra cập nhật";
 "Show icon in dock" = "Hiện icon trên Dock";
 "Start at login" = "Khởi động lúc đăng nhập";
+
+// Dashboard
+"Serial number" = "Số sê-ri";
+"Uptime" = "Thời gian hoạt động";
 
 // Update
 "The latest version of Stats installed" = "Stats đã được cập nhật";
@@ -72,10 +111,25 @@
 "Display mode" = "Chế độ xem";
 "One row" = "Một hàng";
 "Two rows" = "Hai hàng";
+"Mini widget" = "Tiện ích nhỏ";
+"Line chart widget" = "Biểu đồ tuyến tính";
+"Bar chart widget" = "Biểu đồ cột";
+"Pie chart widget" = "Biểu đồ tròn";
+"Network chart widget" = "Biểu đồ mạng";
+"Speed widget" = "Tốc độ";
+"Battery widget" = "Pin";
+"Text widget" = "Văn bản";
+"Memory widget" = "Bộ nhớ";
+"Static width" = "Chiều rộng cố định";
+"Tachometer widget" = "Tachometer";
+"Show symbols" = "Show symbols";
+"Label widget" = "Label";
+"Number of reads in the chart" = "Number of reads in the chart";
 
 // Module Kit
 "Open module settings" = "Mở cài đặt module";
 "Select widget" = "Chọn tiện ích %0";
+"Open widget settings" = "Mở Cài đặt widget";
 "Update interval" = "Thời gian làm mới";
 "Usage history" = "Lịch sử sử dụng";
 "Details" = "Chi tiết";
@@ -84,6 +138,7 @@
 
 // Modules
 "Number of top processes" = "Số lượng top tiến trình";
+"Update interval for top processes" = "Khoảng thời gian cập nhật cho các top tiến trình";
 
 // CPU
 "CPU usage" = "Sử dụng CPU";
@@ -94,14 +149,32 @@
 "Idle" = "Đang rỗi";
 "Show usage per core" = "Hiển thị mức sử dụng trên mỗi lõi";
 "Show hyper-threading cores" = "Hiển thị các lõi siêu phân luồng";
+"Split the value (System/User)" = "Chia nhỏ giá trị (Hệ thống/Người Dùng)";
+"Scheduler limit" = "Giới hạn bộ lập lịch";
+"Speed limit" = "Giới hạn tốc độ";
+"Average load" = "Trung bình tải";
+"1 minute" = "1 phút";
+"5 minutes" = "5 phút";
+"15 minutes" = "15 phút";
 
 // GPU
 "GPU to show" = "GPU để hiển thị";
 "Show GPU type" = "Hiển thị loại GPU";
+"GPU enabled" = "GPU đã bật";
+"GPU disabled" = "GPU bị vô hiệu hóa";
 "GPU temperature" = "Nhiệt độ GPU";
 "GPU utilization" = "Sử dụng GPU";
+"Vendor" = "Nhà cung cấp";
+"Model" = "Model";
+"Status" = "Trạng thái";
+"Active" = "Kích hoạt";
+"Non active" = "Không kích hoạt";
+"Fan speed" = "Tốc độ quạt";
+"Core clock" = "Xung của nhân";
+"Memory clock" = "Xung của bộ nhớ (RAM)";
+"Utilization" = "Công suất sử dụng";
 
-// Memory
+// RAM
 "Memory usage" = "Sử dụng Bộ nhớ";
 "Memory pressure" = "Áp lực bộ nhớ";
 "Total" = "Tổng";
@@ -110,20 +183,23 @@
 "Wired" = "Tính toán (hệ thống)";
 "Compressed" = "Đã nén";
 "Free" = "Còn Trống";
-"Swap" = "Swap";
+"Swap" = "RAM ảo";
+"Split the value (App/Wired/Compressed)" = "Chia nhỏ giá trị (Ứng dụng/Tính toán/Đã nén)";
 
 // Disk
 "Show removable disks" = "Hiển thị các đĩa rời";
 "Used disk memory" = "Đã dùng %0 trong tổng %1";
 "Free disk memory" = "Miễn phí %0 từ %1";
 "Disk to show" = "Đĩa hiển thị";
-"Open disk" = "Mở đĩa";
+"Open disk" = "Mở ổ đĩa";
 "Switch view" = "Chuyển đổi chế độ xem";
 
 // Sensors
 "Temperature unit" = "Đơn vị nhiệt độ";
 "Celsius" = "Độ C";
 "Fahrenheit" = "Độ F";
+"Save the fan speed" = "Lưu tốc độ quạt";
+"Fan" = "Quạt";
 
 // Network
 "Uploading" = "Tải lên";
@@ -131,8 +207,8 @@
 "Public IP" = "IP công cộng";
 "Local IP" = "IP cục bộ";
 "Interface" = "Giao diện mạng";
-"Network" = "Tên mạng";
 "Physical address" = "Địa chỉ vật lý (MAC)";
+"Refresh" = "Làm mới";
 "Click to copy public IP address" = "Nhấp để copy IP công cộng";
 "Click to copy local IP address" = "Nhấp để copy IP cục bộ";
 "Click to copy wifi name" = "Nhấp để copy tên WIFI";
@@ -144,15 +220,18 @@
 "Reader type" = "Loại trình đọc";
 "Interface based" = "Giao diện";
 "Processes based" = "Quá trình";
+"Reset data usage" = "Đặt lại mức sử dụng dữ liệu";
 
 // Battery
 "Level" = "Dung lượng Pin";
 "Source" = "Nguồn";
+"AC Power" = "Nguồn AC";
+"Battery Power" = "Nguồn pin";
 "Time" = "Thời gian";
 "Health" = "Sức khoẻ";
-"Battery" = "PIN";
 "Amperage" = "Cường độ dòng điện";
 "Voltage" = "Điện áp";
+"Cycles" = "Số chu kỳ";
 "Temperature" = "Nhiệt độ";
 "Power adapter" = "Bộ sạc";
 "Power" = "Công suất";
@@ -163,13 +242,49 @@
 "Fully charged" = "Đã sạc đầy";
 "Not connected" = "Không kết nối";
 "Low level notification" = "Thông báo PIN yếu";
+"High level notification" = "Thông báo cấp cao";
 "Low battery" = "Pin yếu";
+"High battery" = "Pin khoẻ";
 "Battery remaining" = "%0% còn lại";
+"Battery remaining to full charge" = "Còn %0% để sạch đầy";
 "Percentage" = "Phần trăm";
 "Percentage and time" = "Phần trăm và thời gian";
 "Time and percentage" = "Thời gian và tỷ lệ phần trăm";
 "Time format" = "Định dạng thời gian";
 "Hide additional information when full" = "Ẩn thông tin bổ sung khi pin đầy";
+"Last charge" = "Lần sạc cuối cùng";
 
-// Fans
-"Fans" = "Quạt";
+// Bluetooth
+"Battery to show" = "Pin hiển thị";
+
+// Colors
+"Based on utilization" = "Dựa trên việc sử dụng";
+"Based on pressure" = "Dựa trên áp lực";
+"System accent" = "Màu nhấn mạnh hệ thống";
+"Monochrome accent" = "Màu nhấn mạnh đơn sắc";
+"Clear" = "Màu sắc rõ ràng";
+"White" = "Màu Trắng";
+"Black" = "Màu Đen";
+"Gray" = "Màu xám";
+"Second gray" = "Màu xám thứ 2";
+"Dark gray" = "Màu xám đen";
+"Light gray" = "Xám nhạt";
+"Red" = "Màu Đỏ";
+"Second red" = "Màu đỏ thứ 2";
+"Green" = "Màu xanh lá";
+"Second green" = "Màu xanh lá thứ 2";
+"Blue" = "Màu xanh da trời";
+"Second blue" = "Màu xanh da trời thứ 2";
+"Yellow" = "Màu vàng";
+"Second yellow" = "Màu vàng thứ 2";
+"Orange" = "Màu cam";
+"Second orange" = "Màu cam thứ 2";
+"Purple" = "Màu tím";
+"Second purple" = "Màu tím thứ 2";
+"Brown" = "Màu nâu";
+"Second brown" = "Màu nâu thứ 2";
+"Cyan" = "Lục lam";
+"Magenta" = "Đỏ tươi";
+"Pink" = "Màu Hồng";
+"Teal" = "Màu mòng két";
+"Indigo" = "Màu xanh đậm";

@@ -9,13 +9,32 @@
 //  Copyright © 2020 Marcelo Chaves. All rights reserved.
 //
 
+// Modules
+"CPU" = "CPU";
+"Open CPU settings" = "Open CPU settings";
+"GPU" = "GPU";
+"Open GPU settings" = "Open GPU settings";
+"RAM" = "RAM";
+"Open RAM settings" = "Open RAM settings";
+"Disk" = "Disk";
+"Open Disk settings" = "Open disk settings";
+"Sensors" = "Sensors";
+"Open Sensors settings" = "Open sensors settings";
+"Fans" = "Fans";
+"Open Fans settings" = "Open fans settings";
+"Network" = "Network";
+"Open Network settings" = "Open network settings";
+"Battery" = "Battery";
+"Open Battery settings" = "Open battery settings";
+"Bluetooth" = "Bluetooth";
+"Open Bluetooth settings" = "Open bluetooth settings";
+
 // Words
 "Unknown" = "Desconhecido";
 "Version" = "Versão";
 "Processor" = "Processador";
 "Memory" = "Memória";
 "Graphics" = "Gráficos";
-"Disk" = "Disco";
 "Close" = "Fechar";
 "Download" = "Baixar";
 "Install" = "Instalar";
@@ -24,6 +43,7 @@
 "Yes" = "Sim";
 "No" = "Não";
 "Automatic" = "Automático";
+"Manual" = "Manual";
 "None" = "Nenhum";
 "Dots" = "Pontos";
 "Arrows" = "Setas";
@@ -31,6 +51,15 @@
 "Short" = "Curto";
 "Long" = "Longo";
 "Statistics" = "Estatísticas";
+"Max" = "Max";
+"Min" = "Min";
+"Reset" = "Reset";
+"Alignment" = "Alignment";
+"Left alignment" = "Left";
+"Center alignment" = "Center";
+"Right alignment" = "Right";
+"Dashboard" = "Dashboard";
+"Disabled" = "Disabled";
 
 // Alerts
 "New version available" = "Nova versão disponível";
@@ -41,19 +70,29 @@
 // Settings
 "Open Activity Monitor" = "Abrir Monitor de Atividades";
 "Report a bug" = "Reportar um erro";
+"Support the application" = "Apoie o aplicativo";
 "Close application" = "Fechar aplicativo";
 "Open application settings" = "Abrir configurações do aplicativo";
-"Open moduleName settings" = "Abrir configurações do %0";
+"Open dashboard" = "Open dashboard";
 
 // Application settings
 "Update application" = "Atualizar aplicativo";
 "Check for updates" = "Verificar se há atualizações";
+"At start" = "Ao iniciar";
+"Once per day" = "Uma vez ao dia";
+"Once per week" = "Uma vez na semana";
+"Once per month" = "Uma vez no mês";
+"Never" = "Nunca";
 "Check for update" = "Verificar atualização";
 "Show icon in dock" = "Mostrar ícone no dock";
 "Start at login" = "Inicie no login";
 
+// Dashboard
+"Serial number" = "Número de série";
+"Uptime" = "Tempo de atividade";
+
 // Update
-"The latest version of Stats installed" = "A versão mais recente do Stats instalada";
+"The latest version of Stats installed" = "A versão mais recente do Stats está instalada";
 "Downloading..." = "Baixando...";
 "Current version: " = "Versão atual:  ";
 "Latest version: " = "Última versão:    ";
@@ -72,10 +111,25 @@
 "Display mode" = "Modo de exibição";
 "One row" = "Uma linha";
 "Two rows" = "Duas linhas";
+"Mini widget" = "Mini";
+"Line chart widget" = "Line chart";
+"Bar chart widget" = "Gráfico de barras";
+"Pie chart widget" = "Gráfico de pizza";
+"Network chart widget" = "Gráfico de rede";
+"Speed widget" = "Velocidade";
+"Battery widget" = "Bateria";
+"Text widget" = "Texto";
+"Memory widget" = "Memoria";
+"Static width" = "Static width";
+"Tachometer widget" = "Tachometer";
+"Show symbols" = "Show symbols";
+"Label widget" = "Label";
+"Number of reads in the chart" = "Number of reads in the chart";
 
 // Module Kit
 "Open module settings" = "Abrir configurações do módulo";
 "Select widget" = "Selecionar widget %0";
+"Open widget settings" = "Open widget settings";
 "Update interval" = "Intervalo de atualização";
 "Usage history" = "Histórico de uso";
 "Details" = "Detalhes";
@@ -84,6 +138,7 @@
 
 // Modules
 "Number of top processes" = "Número de processos principais";
+"Update interval for top processes" = "Update interval for top processes";
 
 // CPU
 "CPU usage" = "Utilização da CPU";
@@ -94,14 +149,32 @@
 "Idle" = "Parado";
 "Show usage per core" = "Mostrar uso por núcleo";
 "Show hyper-threading cores" = "Mostrar núcleos hyper-threading";
+"Split the value (System/User)" = "Divida o valor (Sistema/Usuário)";
+"Scheduler limit" = "Scheduler limit";
+"Speed limit" = "Speed limit";
+"Average load" = "Average load";
+"1 minute" = "1 minute";
+"5 minutes" = "5 minutes";
+"15 minutes" = "15 minutes";
 
 // GPU
 "GPU to show" = "GPU para mostrar";
 "Show GPU type" = "Mostrar tipo de GPU";
+"GPU enabled" = "GPU ativada";
+"GPU disabled" = "GPU desativada";
 "GPU temperature" = "Temperatura da GPU";
 "GPU utilization" = "Utilização da GPU";
+"Vendor" = "Fabricante";
+"Model" = "Modelo";
+"Status" = "Status";
+"Active" = "Ativo";
+"Non active" = "Inativo";
+"Fan speed" = "Velocidade da ventoinha";
+"Core clock" = "Clock do núcleo";
+"Memory clock" = "Clock da memória";
+"Utilization" = "Utilização";
 
-// Memory
+// RAM
 "Memory usage" = "Memória usada";
 "Memory pressure" = "Pressão de memória";
 "Total" = "Total";
@@ -111,11 +184,12 @@
 "Compressed" = "Comprimido";
 "Free" = "Livre";
 "Swap" = "Swap";
+"Split the value (App/Wired/Compressed)" = "Divida o valor (App/Com fio/Comprimido)";
 
 // Disk
 "Show removable disks" = "Mostrar discos removíveis";
 "Used disk memory" = "Usado %0 de %1";
-"Free disk memory" = "Libre %0 de %1";
+"Free disk memory" = "Livre %0 de %1";
 "Disk to show" = "Disco para mostrar";
 "Open disk" = "Disco aberto";
 "Switch view" = "Mudar de vista";
@@ -124,6 +198,8 @@
 "Temperature unit" = "Unidade de temperatura";
 "Celsius" = "Celsius";
 "Fahrenheit" = "Fahrenheit";
+"Save the fan speed" = "Save the fan speed";
+"Fan" = "Fan";
 
 // Network
 "Uploading" = "Enviando";
@@ -131,8 +207,8 @@
 "Public IP" = "IP Público";
 "Local IP" = "IP Local";
 "Interface" = "Interface";
-"Network" = "Rede";
 "Physical address" = "Endereço físico";
+"Refresh" = "Refresh";
 "Click to copy public IP address" = "Clique para copiar o endereço de IP público";
 "Click to copy local IP address" = "Clique para copiar o endereço de IP local";
 "Click to copy wifi name" = "Clique para copiar o nome do wi-fi";
@@ -144,15 +220,18 @@
 "Reader type" = "Tipo de leitor";
 "Interface based" = "Interface";
 "Processes based" = "Processo";
+"Reset data usage" = "Reset data usage";
 
 // Battery
 "Level" = "Nível";
 "Source" = "Fonte";
+"AC Power" = "AC Power";
+"Battery Power" = "Battery Power";
 "Time" = "Tempo";
 "Health" = "Saúde";
-"Battery" = "Bateria";
 "Amperage" = "Amperagem";
 "Voltage" = "Voltagem";
+"Cycles" = "Número de ciclos";
 "Temperature" = "Temperatura";
 "Power adapter" = "Adaptador de energia";
 "Power" = "Energia";
@@ -163,13 +242,49 @@
 "Fully charged" = "Completamente carregado";
 "Not connected" = "Não conectado";
 "Low level notification" = "Notificação de baixo nível";
+"High level notification" = "Notificação de alto nível";
 "Low battery" = "Bateria fraca";
+"High battery" = "Bateria cheia";
 "Battery remaining" = "%0% restante";
-"Percentage" = "Percentagem";
+"Battery remaining to full charge" = "%0% to full charge";
+"Percentage" = "Porcentagem";
 "Percentage and time" = "Porcentagem e tempo";
 "Time and percentage" = "Tempo e porcentagem";
 "Time format" = "Formato de hora";
 "Hide additional information when full" = "Ocultar informações adicionais quando estiver cheia";
+"Last charge" = "Última carga";
 
-// Fans
-"Fans" = "Fans";
+// Bluetooth
+"Battery to show" = "Battery to show";
+
+// Colors
+"Based on utilization" = "Based on utilization";
+"Based on pressure" = "Based on pressure";
+"System accent" = "System accent";
+"Monochrome accent" = "Monochrome accent";
+"Clear" = "Clear";
+"White" = "White";
+"Black" = "Black";
+"Gray" = "Gray";
+"Second gray" = "Second gray";
+"Dark gray" = "Dark gray";
+"Light gray" = "Light gray";
+"Red" = "Red";
+"Second red" = "Second red";
+"Green" = "Green";
+"Second green" = "Second green";
+"Blue" = "Blue";
+"Second blue" = "Second blue";
+"Yellow" = "Yellow";
+"Second yellow" = "Second yellow";
+"Orange" = "Orange";
+"Second orange" = "Second orange";
+"Purple" = "Purple";
+"Second purple" = "Second purple";
+"Brown" = "Brown";
+"Second brown" = "Second brown";
+"Cyan" = "Cyan";
+"Magenta" = "Magenta";
+"Pink" = "Pink";
+"Teal" = "Teal";
+"Indigo" = "Indigo";

@@ -9,13 +9,32 @@
 //  Copyright © 2020 Serhiy Mytrovtsiy. All rights reserved.
 //
 
+// Modules
+"CPU" = "CPU";
+"Open CPU settings" = "Åpne CPU-innstillinger";
+"GPU" = "GPU";
+"Open GPU settings" = "Åpne GPU-innstillinger";
+"RAM" = "Minne";
+"Open RAM settings" = "Åpne minneinnstillinger";
+"Disk" = "Disk";
+"Open Disk settings" = "Åpne diskinnstillinger";
+"Sensors" = "Sensors";
+"Open Sensors settings" = "Åpne sensorinnstillinger";
+"Fans" = "Fans";
+"Open Fans settings" = "Åpne vifteinnstillinger";
+"Network" = "Network";
+"Open Network settings" = "Åpne nettverksinnstillinger";
+"Battery" = "Battery";
+"Open Battery settings" = "Åpne batteriinnstillinger";
+"Bluetooth" = "Bluetooth";
+"Open Bluetooth settings" = "Åpne bluetooth-innstillinger";
+
 // Words
 "Unknown" = "Ukjent";
 "Version" = "Versjon";
 "Processor" = "Prosessor";
 "Memory" = "Minne";
 "Graphics" = "Grafikk";
-"Disk" = "Disk";
 "Close" = "Lukk";
 "Download" = "Nedlasting";
 "Install" = "Installer";
@@ -24,6 +43,7 @@
 "Yes" = "Ja";
 "No" = "Nei";
 "Automatic" = "Automatisk";
+"Manual" = "Manuell";
 "None" = "Ingen";
 "Dots" = "Prikker";
 "Arrows" = "Piler";
@@ -31,6 +51,15 @@
 "Short" = "Kort";
 "Long" = "Lang";
 "Statistics" = "Statistikk";
+"Max" = "Maks";
+"Min" = "Min";
+"Reset" = "Nullstill";
+"Alignment" = "Justering";
+"Left alignment" = "Venstre";
+"Center alignment" = "Sentrum";
+"Right alignment" = "Høyre";
+"Dashboard" = "Dashboard";
+"Disabled" = "Disabled";
 
 // Alerts
 "New version available" = "Ny versjon tilgjengelig";
@@ -41,19 +70,29 @@
 // Settings
 "Open Activity Monitor" = "Åpne Aktivitetsmonitor";
 "Report a bug" = "Meld en feil";
+"Support the application" = "Støtt programmet";
 "Close application" = "Lukk programmet";
 "Open application settings" = "Åpne programinnstillinger";
-"Open moduleName settings" = "Åpne innstillinger for %0";
+"Open dashboard" = "Open dashboard";
 
 // Application settings
 "Update application" = "Oppdater programmet";
 "Check for updates" = "Se etter oppdateringer";
+"At start" = "Ved oppstart";
+"Once per day" = "Daglig";
+"Once per week" = "Ukentlig";
+"Once per month" = "Månedlig";
+"Never" = "Aldri";
 "Check for update" = "Se etter oppdatering";
 "Show icon in dock" = "Vis ikon i dock";
 "Start at login" = "Start ved innlogging";
 
+// Dashboard
+"Serial number" = "Serienummer";
+"Uptime" = "Oppetid";
+
 // Update
-"The latest version of Stats installed" = "Den nyeste versjonen av Stats er installert";
+"The latest version of Stats installed" = "Du har den nyeste versjonen av Stats";
 "Downloading..." = "Laster ned...";
 "Current version: " = "Nåværende versjon: ";
 "Latest version: " = "Nyeste version: ";
@@ -72,10 +111,25 @@
 "Display mode" = "Visningsmodus";
 "One row" = "En rad";
 "Two rows" = "To rader";
+"Mini widget" = "Mini";
+"Line chart widget" = "Linjediagram";
+"Bar chart widget" = "Søylediagram";
+"Pie chart widget" = "Kakediagram";
+"Network chart widget" = "Linjediagram";
+"Speed widget" = "Tall";
+"Battery widget" = "Batteri";
+"Text widget" = "Tekst";
+"Memory widget" = "Tall";
+"Static width" = "Statisk bredde";
+"Tachometer widget" = "Tachometer";
+"Show symbols" = "Show symbols";
+"Label widget" = "Label";
+"Number of reads in the chart" = "Number of reads in the chart";
 
 // Module Kit
 "Open module settings" = "Åpne modulinnstillinger";
 "Select widget" = "Velg %0-visning";
+"Open widget settings" = "Åpne widgetinnstillinger";
 "Update interval" = "Oppdateringsintervall";
 "Usage history" = "Brukshistorikk";
 "Details" = "Detaljer";
@@ -84,6 +138,7 @@
 
 // Modules
 "Number of top processes" = "Antall topp-prosesser";
+"Update interval for top processes" = "Oppdateringsintervall for topp-prosesser";
 
 // CPU
 "CPU usage" = "CPU-bruk";
@@ -94,14 +149,32 @@
 "Idle" = "Ledig";
 "Show usage per core" = "Vis bruk per kjerne";
 "Show hyper-threading cores" = "Vis hyper-threading-kjerner";
+"Split the value (System/User)" = "Del verdien (System/Bruker)";
+"Scheduler limit" = "Grense for tidsplanlegger";
+"Speed limit" = "Fartsgrense";
+"Average load" = "Gjennomsnittsbelastning";
+"1 minute" = "1 minutt";
+"5 minutes" = "5 minutter";
+"15 minutes" = "15 minutter";
 
 // GPU
 "GPU to show" = "GPU å vise";
-"Show GPU type" = "Vis GPU-typen";
+"Show GPU type" = "Vis GPU-type";
+"GPU enabled" = "GPU i bruk";
+"GPU disabled" = "GPU ikke i bruk";
 "GPU temperature" = "GPU-temperatur";
 "GPU utilization" = "GPU-bruk";
+"Vendor" = "Produsent";
+"Model" = "Modell";
+"Status" = "Status";
+"Active" = "Aktiv";
+"Non active" = "Inaktiv";
+"Fan speed" = "Viftehastighet";
+"Core clock" = "Kjerneklokke";
+"Memory clock" = "Minneklokke";
+"Utilization" = "Bruk";
 
-// Memory
+// RAM
 "Memory usage" = "Minnebruk";
 "Memory pressure" = "Minnebelastning";
 "Total" = "Totalt";
@@ -111,11 +184,12 @@
 "Compressed" = "Komprimert";
 "Free" = "Ledig";
 "Swap" = "Swap";
+"Split the value (App/Wired/Compressed)" = "Del verdien (Programmer/Opptatt/Komprimert)";
 
 // Disk
 "Show removable disks" = "Vis utløsbare disker";
 "Used disk memory" = "Brukte %0 fra %1";
-"Free disk memory" = "Gratis %0 fra %1";
+"Free disk memory" = "Ledig %0 fra %1";
 "Disk to show" = "Disker å vise";
 "Open disk" = "Åpne disken";
 "Switch view" = "Bytt visning";
@@ -124,6 +198,8 @@
 "Temperature unit" = "Temperaturenhet";
 "Celsius" = "Celsius";
 "Fahrenheit" = "Fahrenheit";
+"Save the fan speed" = "Lagre viftehastighet";
+"Fan" = "Fan";
 
 // Network
 "Uploading" = "Opplasting";
@@ -131,8 +207,8 @@
 "Public IP" = "Offentlig IP";
 "Local IP" = "Lokal IP";
 "Interface" = "Grensesnitt";
-"Network" = "Nettverk";
 "Physical address" = "Fysisk addresse";
+"Refresh" = "Refresh";
 "Click to copy public IP address" = "Klikk for å kopiere offentlig IP-adresse";
 "Click to copy local IP address" = "Klikk for å kopiere lokal IP-adresse";
 "Click to copy wifi name" = "Klikk for å kopiere nettverksnavn";
@@ -144,15 +220,18 @@
 "Reader type" = "Lesertype";
 "Interface based" = "Grensesnitt";
 "Processes based" = "Prosess";
+"Reset data usage" = "Reset data usage";
 
 // Battery
 "Level" = "Nivå";
 "Source" = "Kilde";
+"AC Power" = "Strømforsyning";
+"Battery Power" = "Batteri";
 "Time" = "Tid";
 "Health" = "Helse";
-"Battery" = "Batteri";
 "Amperage" = "Strømstyrke";
 "Voltage" = "Spenning";
+"Cycles" = "Sykluser";
 "Temperature" = "Temperatur";
 "Power adapter" = "Strømadapter";
 "Power" = "Strøm";
@@ -163,13 +242,49 @@
 "Fully charged" = "Fullstendig ladet";
 "Not connected" = "Ikke koblet til";
 "Low level notification" = "Varsling ved lavt nivå";
+"High level notification" = "Varsling ved høyt nivå";
 "Low battery" = "Lavt batterinivå";
+"High battery" = "Høyt batterinivå";
 "Battery remaining" = "%0% igjen";
+"Battery remaining to full charge" = "%0% til fulladet";
 "Percentage" = "Prosent";
 "Percentage and time" = "Prosent og tid";
 "Time and percentage" = "Tid og prosent";
 "Time format" = "Tidsformat";
 "Hide additional information when full" = "Skjul ekstra information når fulladet";
+"Last charge" = "Siste lading";
 
-// Fans
-"Fans" = "Vifter";
+// Bluetooth
+"Battery to show" = "Battery å vise";
+
+// Colors
+"Based on utilization" = "Basert på bruk";
+"Based on pressure" = "Basert på trykk";
+"System accent" = "Systemaksent";
+"Monochrome accent" = "Ensfarget aksent";
+"Clear" = "Blank";
+"White" = "Hvit";
+"Black" = "Svart";
+"Gray" = "Grå";
+"Second gray" = "Grå 2";
+"Dark gray" = "Mørkegrå";
+"Light gray" = "Lysegrå";
+"Red" = "Rød";
+"Second red" = "Rød 2";
+"Green" = "Grønn";
+"Second green" = "Grønn 2";
+"Blue" = "Blå";
+"Second blue" = "Blå 2";
+"Yellow" = "Gul";
+"Second yellow" = "Gul 2";
+"Orange" = "Oransje";
+"Second orange" = "Oransje 2";
+"Purple" = "Lilla";
+"Second purple" = "Lilla 2";
+"Brown" = "Brun";
+"Second brown" = "Brun 2";
+"Cyan" = "Turkis";
+"Magenta" = "Magenta";
+"Pink" = "Rosa";
+"Teal" = "Blågrønn";
+"Indigo" = "Indigo";

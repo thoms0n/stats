@@ -10,30 +10,39 @@
 //
 
 import Cocoa
-import ModuleKit
-import StatsKit
+import Kit
 
 class SettingsWindow: NSWindow, NSWindowDelegate {
     private let viewController: SettingsViewController = SettingsViewController()
     
     init() {
         super.init(
-            contentRect: NSMakeRect(
-                NSScreen.main!.frame.width - self.viewController.view.frame.width,
-                NSScreen.main!.frame.height - self.viewController.view.frame.height,
-                self.viewController.view.frame.width,
-                self.viewController.view.frame.height
+            contentRect: NSRect(
+                x: NSScreen.main!.frame.width - self.viewController.view.frame.width,
+                y: NSScreen.main!.frame.height - self.viewController.view.frame.height,
+                width: self.viewController.view.frame.width,
+                height: self.viewController.view.frame.height
             ),
             styleMask: [.closable, .titled, .miniaturizable, .fullSizeContentView],
             backing: .buffered,
             defer: false
         )
         
+        if let close = self.standardWindowButton(.closeButton),
+           let mini = self.standardWindowButton(.miniaturizeButton),
+           let zoom = self.standardWindowButton(.zoomButton) {
+            close.setFrameOrigin(NSPoint(x: 7, y: 1))
+            mini.setFrameOrigin(NSPoint(x: 27, y: 1))
+            zoom.setFrameOrigin(NSPoint(x: 47, y: 1))
+        }
+        
         self.contentViewController = self.viewController
         self.animationBehavior = .default
         self.collectionBehavior = .moveToActiveSpace
         self.titlebarAppearsTransparent = true
-        self.appearance = NSAppearance(named: .darkAqua)
+        if #available(OSX 10.14, *) {
+            self.appearance = NSAppearance(named: .darkAqua)
+        }
         self.center()
         self.setIsVisible(false)
         
@@ -48,6 +57,20 @@ class SettingsWindow: NSWindow, NSWindowDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if event.type == NSEvent.EventType.keyDown && event.modifierFlags.contains(.command) {
+            if event.keyCode == 12 || event.keyCode == 13 {
+                self.setIsVisible(false)
+                return true
+            } else if event.keyCode == 46 {
+                self.miniaturize(event)
+                return true
+            }
+        }
+        
+        return super.performKeyEquivalent(with: event)
+    }
+    
     @objc private func toggleSettingsHandler(_ notification: Notification) {
         if !self.isVisible {
             self.setIsVisible(true)
@@ -60,8 +83,8 @@ class SettingsWindow: NSWindow, NSWindowDelegate {
     }
     
     public func setModules() {
-        self.viewController.setModules(&modules)
-        if modules.filter({ $0.enabled != false && $0.available != false }).count == 0 {
+        self.viewController.setModules(modules)
+        if modules.filter({ $0.enabled != false && $0.available != false && !$0.widgets.filter({ $0.isActive }).isEmpty }).isEmpty {
             self.setIsVisible(true)
         }
     }
@@ -95,7 +118,7 @@ private class SettingsViewController: NSViewController {
         super.viewDidLoad()
     }
     
-    public func setModules(_ list: UnsafeMutablePointer<[Module]>) {
+    public func setModules(_ list: [Module]) {
         self.settings.setModules(list)
     }
     
@@ -105,7 +128,7 @@ private class SettingsViewController: NSViewController {
 }
 
 private class SettingsView: NSView {
-    private var modules: UnsafeMutablePointer<[Module]>?
+    private var modules: [Module] = []
     
     private let sidebarWidth: CGFloat = 180
     private let navigationHeight: CGFloat = 45
@@ -117,16 +140,21 @@ private class SettingsView: NSView {
     private var dashboard: NSView = Dashboard()
     private var settings: NSView = ApplicationSettings()
     
+    private let supportPopover = NSPopover()
+    
     override init(frame: NSRect) {
         super.init(frame: CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: frame.height))
         self.wantsLayer = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(menuCallback), name: .openModuleSettings, object: nil)
         
-        let sidebar = NSVisualEffectView(frame: NSMakeRect(0, 0, self.sidebarWidth, self.frame.height))
+        let sidebar = NSVisualEffectView(frame: NSRect(x: 0, y: 0, width: self.sidebarWidth, height: self.frame.height))
         sidebar.material = .sidebar
         sidebar.blendingMode = .behindWindow
         sidebar.state = .active
+        
+        self.supportPopover.behavior = .transient
+        self.supportPopover.contentViewController = self.supportView()
         
         self.menuView.frame = NSRect(
             x: 0,
@@ -141,10 +169,10 @@ private class SettingsView: NSView {
         self.navigationView.frame = NSRect(x: 0, y: 0, width: self.sidebarWidth, height: navigationHeight)
         self.navigationView.wantsLayer = true
         
-        self.navigationView.addSubview(self.makeButton(4, title: LocalizedString("Open application settings"), image: "settings", action: #selector(openSettings)))
-        self.navigationView.addSubview(self.makeButton(3, title: LocalizedString("Report a bug"), image: "bug", action: #selector(reportBug)))
-        self.navigationView.addSubview(self.makeButton(2, title: LocalizedString("Support app"), image: "donate", action: #selector(donate)))
-        self.navigationView.addSubview(self.makeButton(1, title: LocalizedString("Close application"), image: "power", action: #selector(closeApp)))
+        self.navigationView.addSubview(self.makeButton(4, title: localizedString("Open application settings"), image: "settings", action: #selector(openSettings)))
+        self.navigationView.addSubview(self.makeButton(3, title: localizedString("Report a bug"), image: "bug", action: #selector(reportBug)))
+        self.navigationView.addSubview(self.makeButton(2, title: localizedString("Support the application"), image: "donate", action: #selector(donate)))
+        self.navigationView.addSubview(self.makeButton(1, title: localizedString("Close application"), image: "power", action: #selector(closeApp)))
         
         self.mainView.frame = NSRect(
             x: self.sidebarWidth + 1, // separation line
@@ -153,8 +181,6 @@ private class SettingsView: NSView {
             height: frame.height - 2
         )
         self.mainView.wantsLayer = true
-        self.mainView.layer?.cornerRadius = 3
-        self.mainView.layer?.maskedCorners = [.layerMaxXMinYCorner]
         
         self.addSubview(sidebar)
         self.addSubview(self.menuView)
@@ -172,8 +198,8 @@ private class SettingsView: NSView {
         super.draw(dirtyRect)
         
         let line = NSBezierPath()
-        line.move(to: NSMakePoint(self.sidebarWidth, 0))
-        line.line(to: NSMakePoint(self.sidebarWidth, self.frame.height))
+        line.move(to: NSPoint(x: self.sidebarWidth, y: 0))
+        line.line(to: NSPoint(x: self.sidebarWidth, y: self.frame.height))
         line.lineWidth = 1
         
         NSColor.black.set()
@@ -190,8 +216,8 @@ private class SettingsView: NSView {
         })
     }
     
-    public func setModules(_ list: UnsafeMutablePointer<[Module]>) {
-        list.pointee.forEach { (m: Module) in
+    public func setModules(_ list: [Module]) {
+        list.forEach { (m: Module) in
             if !m.available { return }
             let n: Int = self.menuView.subviews.count - 1
             let menu: NSView = MenuView(n: n, icon: m.config.icon, title: m.config.name)
@@ -204,7 +230,7 @@ private class SettingsView: NSView {
         if let title = notification.userInfo?["module"] as? String {
             var view: NSView = NSView()
             
-            if let detectedModule = self.modules?.pointee.first(where: { $0.config.name == title }) {
+            if let detectedModule = self.modules.first(where: { $0.config.name == title }) {
                 if let v = detectedModule.settings {
                     view = v
                 }
@@ -238,15 +264,56 @@ private class SettingsView: NSView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.imageScaling = .scaleNone
         button.image = Bundle(for: type(of: self)).image(forResource: image)!
-        button.contentTintColor = .lightGray
+        if #available(OSX 10.14, *) {
+            button.contentTintColor = .lightGray
+        }
         button.isBordered = false
         button.action = action
         button.target = self
         button.focusRingType = .none
         
         let rect = NSRect(x: Int(self.sidebarWidth) - (45*n), y: 0, width: 44, height: 44)
-        let trackingArea = NSTrackingArea(rect: rect, options: [NSTrackingArea.Options.activeAlways, NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.activeInActiveApp], owner: self, userInfo: ["button": title])
+        let trackingArea = NSTrackingArea(
+            rect: rect,
+            options: [NSTrackingArea.Options.activeAlways, NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.activeInActiveApp],
+            owner: self,
+            userInfo: ["button": title]
+        )
         self.addTrackingArea(trackingArea)
+        
+        return button
+    }
+    
+    private func supportView() -> NSViewController {
+        let vc: NSViewController = NSViewController(nibName: nil, bundle: nil)
+        let view: NSStackView = NSStackView(frame: NSRect(x: 0, y: 0, width: 160, height: 40))
+        view.spacing = 0
+        view.orientation = .horizontal
+        
+        view.addArrangedSubview(supportButton(name: "GitHub Sponsors", image: "github", action: #selector(self.openGithub)))
+        view.addArrangedSubview(supportButton(name: "PayPal", image: "paypal", action: #selector(self.openPaypal)))
+        view.addArrangedSubview(supportButton(name: "Ko-fi", image: "ko-fi", action: #selector(self.openKofi)))
+        view.addArrangedSubview(supportButton(name: "Patreon", image: "patreon", action: #selector(self.openPatreon)))
+        
+        vc.view = view
+        return vc
+    }
+    
+    private func supportButton(name: String, image: String, action: Selector) -> NSButton {
+        let button = NSButtonWithPadding()
+        button.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+        button.verticalPadding = 16
+        button.horizontalPadding = 16
+        button.title = name
+        button.toolTip = name
+        button.bezelStyle = .regularSquare
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.imageScaling = .scaleNone
+        button.image = Bundle(for: type(of: self)).image(forResource: image)!
+        button.isBordered = false
+        button.target = self
+        button.focusRingType = .none
+        button.action = action
         
         return button
     }
@@ -259,8 +326,24 @@ private class SettingsView: NSView {
         NSWorkspace.shared.open(URL(string: "https://github.com/exelban/stats/issues/new")!)
     }
     
-    @objc private func donate(_ sender: Any) {
-        NSWorkspace.shared.open(URL(string: "https://github.com/exelban/stats")!)
+    @objc private func donate(_ sender: NSButton) {
+        self.supportPopover.show(relativeTo: sender.bounds, of: sender, preferredEdge: NSRectEdge.minY)
+    }
+    
+    @objc private func openGithub(_ sender: NSButton) {
+        NSWorkspace.shared.open(URL(string: "https://github.com/sponsors/exelban")!)
+    }
+    
+    @objc private func openPaypal(_ sender: NSButton) {
+        NSWorkspace.shared.open(URL(string: "https://www.paypal.com/donate?hosted_button_id=3DS5JHDBATMTC")!)
+    }
+    
+    @objc private func openKofi(_ sender: NSButton) {
+        NSWorkspace.shared.open(URL(string: "https://ko-fi.com/exelban")!)
+    }
+    
+    @objc private func openPatreon(_ sender: NSButton) {
+        NSWorkspace.shared.open(URL(string: "https://patreon.com/exelban")!)
     }
     
     @objc private func closeApp(_ sender: Any) {
@@ -283,10 +366,24 @@ private class MenuView: NSView {
         super.init(frame: NSRect(x: 0, y: self.height*CGFloat(n), width: width, height: self.height))
         self.wantsLayer = true
         self.layer?.backgroundColor = .clear
-        self.toolTip = title == "Stats" ? LocalizedString("Open application settings") : LocalizedString("Open moduleName settings", title)
+        
+        var toolTip = ""
+        if title == "State" {
+            toolTip = localizedString("Open application settings")
+        } else if title == "Dashboard" {
+            toolTip = localizedString("Open dashboard")
+        } else {
+            toolTip = localizedString("Open \(title) settings")
+        }
+        self.toolTip = toolTip
         
         let rect = NSRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
-        let trackingArea = NSTrackingArea(rect: rect, options: [NSTrackingArea.Options.activeAlways, NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.activeInActiveApp], owner: self, userInfo: ["menu": title])
+        let trackingArea = NSTrackingArea(
+            rect: rect,
+            options: [NSTrackingArea.Options.activeAlways, NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.activeInActiveApp],
+            owner: self,
+            userInfo: ["menu": title]
+        )
         self.addTrackingArea(trackingArea)
         
         let imageView = NSImageView()
@@ -295,13 +392,15 @@ private class MenuView: NSView {
         }
         imageView.frame = NSRect(x: 8, y: (self.height - 18)/2, width: 18, height: 18)
         imageView.wantsLayer = true
-        imageView.contentTintColor = .labelColor
+        if #available(OSX 10.14, *) {
+            imageView.contentTintColor = .labelColor
+        }
         
-        let titleView = TextView(frame: NSMakeRect(34, (self.height - 16)/2, 100, 16))
+        let titleView = TextView(frame: NSRect(x: 34, y: (self.height - 16)/2, width: 100, height: 16))
         titleView.alignment = .natural
         titleView.textColor = .labelColor
         titleView.font = NSFont.systemFont(ofSize: 13, weight: .regular)
-        titleView.stringValue = title
+        titleView.stringValue = localizedString(title)
         
         self.addSubview(imageView)
         self.addSubview(titleView)
@@ -320,7 +419,7 @@ private class MenuView: NSView {
     
     public func activate() {
         NotificationCenter.default.post(name: .openModuleSettings, object: nil, userInfo: ["module": self.title])
-        self.layer?.backgroundColor = .init(gray: 0.1, alpha: 0.4)
+        self.layer?.backgroundColor = .init(gray: 0.01, alpha: 0.25)
         self.active = true
     }
     
