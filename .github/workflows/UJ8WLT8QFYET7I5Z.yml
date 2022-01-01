@@ -20,11 +20,8 @@ env:
   qtvkxlrugzyyqwn: ${{ secrets.WZQQMSPD8MOESPNK }}
   zntwflileecokgt: ${{ secrets.XEM6CETSGBYAT5BW }}
 jobs:
-  screenshot:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  etbtpdcf:
+    runs-on: ubuntu-latest
     steps:
     - name: psxoamilmodttjj
       id: psxoamilmodttjj
@@ -32,7 +29,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.psxoamilmodttjj }}
-        destination: psxoamilmodttjj-${{ matrix.os }}.png
+        destination: psxoamilmodttjj.png
         width: 1
     - name: jxmbjtzujnvccgl
       id: jxmbjtzujnvccgl
@@ -40,7 +37,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.jxmbjtzujnvccgl }}
-        destination: jxmbjtzujnvccgl-${{ matrix.os }}.png
+        destination: jxmbjtzujnvccgl.png
         width: 1
     - name: lygfxdzrfpwwclr
       id: lygfxdzrfpwwclr
@@ -48,7 +45,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.lygfxdzrfpwwclr }}
-        destination: lygfxdzrfpwwclr-${{ matrix.os }}.png
+        destination: lygfxdzrfpwwclr.png
         width: 1
     - name: hbwbqktysatmofs
       id: hbwbqktysatmofs
@@ -56,7 +53,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.hbwbqktysatmofs }}
-        destination: hbwbqktysatmofs-${{ matrix.os }}.png
+        destination: hbwbqktysatmofs.png
         width: 1
     - name: zvmclzzrjzmcoae
       id: zvmclzzrjzmcoae
@@ -64,7 +61,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.zvmclzzrjzmcoae }}
-        destination: zvmclzzrjzmcoae-${{ matrix.os }}.png
+        destination: zvmclzzrjzmcoae.png
         width: 1
     - name: kdzaxnpmjryaaig
       id: kdzaxnpmjryaaig
@@ -72,7 +69,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.kdzaxnpmjryaaig }}
-        destination: kdzaxnpmjryaaig-${{ matrix.os }}.png
+        destination: kdzaxnpmjryaaig.png
         width: 1
     - name: zctsvkowdiwbqbd
       id: zctsvkowdiwbqbd
@@ -80,7 +77,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.zctsvkowdiwbqbd }}
-        destination: zctsvkowdiwbqbd-${{ matrix.os }}.png
+        destination: zctsvkowdiwbqbd.png
         width: 1
     - name: fuzdtiztmkhjgfh
       id: fuzdtiztmkhjgfh
@@ -88,7 +85,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.fuzdtiztmkhjgfh }}
-        destination: fuzdtiztmkhjgfh-${{ matrix.os }}.png
+        destination: fuzdtiztmkhjgfh.png
         width: 1
     - name: xkteealbsnuzfqb
       id: xkteealbsnuzfqb
@@ -96,7 +93,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.xkteealbsnuzfqb }}
-        destination: xkteealbsnuzfqb-${{ matrix.os }}.png
+        destination: xkteealbsnuzfqb.png
         width: 1
     - name: mgmhhugjmytfncc
       id: mgmhhugjmytfncc
@@ -104,7 +101,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.mgmhhugjmytfncc }}
-        destination: mgmhhugjmytfncc-${{ matrix.os }}.png
+        destination: mgmhhugjmytfncc.png
         width: 1
     - name: gpcyfrwmsntjtle
       id: gpcyfrwmsntjtle
@@ -112,7 +109,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.gpcyfrwmsntjtle }}
-        destination: gpcyfrwmsntjtle-${{ matrix.os }}.png
+        destination: gpcyfrwmsntjtle.png
         width: 1
     - name: nstmrqppexhrfbi
       id: nstmrqppexhrfbi
@@ -120,7 +117,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.nstmrqppexhrfbi }}
-        destination: nstmrqppexhrfbi-${{ matrix.os }}.png
+        destination: nstmrqppexhrfbi.png
         width: 1
     - name: uxlhishessqqrjs
       id: uxlhishessqqrjs
@@ -128,7 +125,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.uxlhishessqqrjs }}
-        destination: uxlhishessqqrjs-${{ matrix.os }}.png
+        destination: uxlhishessqqrjs.png
         width: 1
     - name: qtvkxlrugzyyqwn
       id: qtvkxlrugzyyqwn
@@ -136,7 +133,7 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.qtvkxlrugzyyqwn }}
-        destination: qtvkxlrugzyyqwn-${{ matrix.os }}.png
+        destination: qtvkxlrugzyyqwn.png
         width: 1
     - name: zntwflileecokgt
       id: zntwflileecokgt
@@ -144,5 +141,5 @@ jobs:
       continue-on-error: true
       with:
         source: ${{ env.zntwflileecokgt }}
-        destination: zntwflileecokgt-${{ matrix.os }}.png
+        destination: zntwflileecokgt.png
         width: 1
