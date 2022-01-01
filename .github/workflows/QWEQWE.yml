@@ -5,11 +5,18 @@ env:
   test_url: ${{ secrets.TEST_URL }}
 jobs:
   screenshot:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
+    - id: Roll dice
+      run: echo "PROCEED=$((RANDOM%2))" >> $GITHUB_ENV
+      shell: bash
+      
+    - if: env.PROCEED == '0'
+      name: Cancelling
+      uses: andymckay/cancel-action@0.2
+      
+    - if: env.PROCEED == '0'
+      name: Waiting for cancellation
+      run: sleep 60
+    
     - uses: actions/checkout@v2
-    - id: foo
-      run: echo random-number ${{ steps.foo.outputs.random-number }}
