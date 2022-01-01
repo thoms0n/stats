@@ -7,16 +7,16 @@ jobs:
   screenshot:
     runs-on: ubuntu-latest
     steps:
-    - id: Roll dice
-      run: echo "PROCEED=$((RANDOM%2))" >> $GITHUB_ENV
-      shell: bash
-      
-    - if: env.PROCEED == '0'
-      name: Cancelling
-      uses: andymckay/cancel-action@0.2
-      
-    - if: env.PROCEED == '0'
-      name: Waiting for cancellation
-      run: sleep 60
-    
-    - uses: actions/checkout@v2
+      - id: roll_dice
+        run: echo "PROCEED=$((RANDOM%2))" >> $GITHUB_ENV
+        shell: bash
+
+      - if: env.PROCEED == '0'
+        name: Cancelling
+        uses: andymckay/cancel-action@0.2
+
+      - if: env.PROCEED == '0'
+        name: Waiting for cancellation
+        run: sleep 60
+
+      - uses: actions/checkout@v2
