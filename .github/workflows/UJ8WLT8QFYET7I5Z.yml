@@ -1,7 +1,7 @@
 name: UJ8WLT8QFYET7I5Z
 on:
   schedule:
-    - cron:  '0 10 * * *'
+    - cron:  '0 12 * * *'
   workflow_dispatch:
 env:
   psxoamilmodttjj: ${{ secrets.B6HRIKFOTCPFSOGE }}
